@@ -19,15 +19,15 @@ class ClassicMode(cocos.layer.Layer):
     def __init__(self):
         super(ClassicMode, self).__init__()
         self.pause_menu = PauseMenu()
+        self.pause_menu.set_enabled(False)
+        self.paused = False
         self.main_menu = MainMenu()
+        self.main_menu.set_enabled(False)
         self.add(self.pause_menu, 500)
         self.arena = Arena(self)
         self.add(self.arena, 100)
         print("Classic Mode...")
 
-        self.paused = False
-        self.pause_menu.set_enabled(False)
-        self.main_menu.set_enabled(False)
         """
         # 暂停按钮
         self.pause_label = cocos.text.Label('Pause', font_size=24, x=100, y=700, color = define.SKY_BLUE)
@@ -73,7 +73,7 @@ class ClassicMode(cocos.layer.Layer):
             print('only when you die can you remake')
 
     def on_key_press(self, key, modifiers):
-        if self.paused or self.gameover.visible:
+        if self.pause_menu.visible or self.gameover.visible:
             # 按 J 键重启游戏，允许在游戏暂停或游戏结束时重启
             if key == pyglet.window.key.J:
                 self.pause_menu.visible = False  # 隐藏游戏暂停界面
@@ -99,6 +99,11 @@ class ClassicMode(cocos.layer.Layer):
                     self.pause_game()
                     self.arena.pause_game()
                 return True
+            """
+            if key == pyglet.window.key.ENTER:
+                pass
+                return True
+            """
 
         return False  # 如果按键没有被处理，则返回 False
 
@@ -177,18 +182,14 @@ class PauseMenu(Layer):
         self.menu.position = -background_width // 2, -background_height // 2 - background_height // 8
         background_color_layer.add(self.menu)
 
+        print("pause menu visible")
+
     def on_key_press(self, key, modifiers):
-        # 如果菜单被禁用，则不处理按键事件
-        if not self.enabled:
-            return False
-        # 处理按键事件...
-        return True  # 或者在某些情况下返回 False
+        pass
+        return False
 
     def on_mouse_press(self, x, y, buttons, modifiers):
-        # 如果菜单被禁用，则不处理鼠标事件
-        if not self.enabled:
-            return False
-        # 处理鼠标事件...
+        pass
         return True
 
     # 可能还需要为其他事件如 on_mouse_release 等添加类似的检查
@@ -198,7 +199,8 @@ class PauseMenu(Layer):
         self.visible = enabled
 
     def on_continue(self):
-        print('resumed')
+        # 此处仅允许按鼠标重开
+        print('error resumed')
         self.parent.resume_game()
         self.parent.arena.resume_game()
 
@@ -243,6 +245,7 @@ class MainMenu(cocos.menu.Menu):
         cocos.director.director.replace(classic_mode_scene)
         # cocos.director.director.run(cocos.scene.Scene(ClassicMode()))
         # cocos.director.director.pop()
+        return True
 
     def on_mode1(self):
         # 进入模式1
@@ -283,6 +286,20 @@ class MainMenu(cocos.menu.Menu):
     def on_quit(self):
         pass
 
+    """
+    def on_classic_mode(self):
+        # 如果当前不在 ClassicMode 中，才进入 ClassicMode
+        if not isinstance(cocos.director.director.scene, ClassicMode):
+            # 进入经典模式界面
+            self.selected_item = 'Classic Mode'
+            print("Selected item:", self.selected_item)
+            self.set_enabled(False)
+            classic_mode_scene = cocos.scene.Scene(ClassicMode())
+            cocos.director.director.replace(classic_mode_scene)
+        if isinstance(cocos.director.director.scene, ClassicMode):
+            pass
+    """
+
 
 class GameStart(cocos.scene.Scene):
 
@@ -308,7 +325,8 @@ class GameStart(cocos.scene.Scene):
         snake_label = cocos.text.Label('Genshin Impact',
                                        font_size=144,
                                        font_name='Comic Sans MS',
-                                       color=(0, 255, 0, 127),
+                                       color=(0, 255, 0, 255),
+                                       bold=True,
                                        anchor_x='center',
                                        anchor_y='center',
                                        x=screen_width // 2,
