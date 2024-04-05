@@ -28,13 +28,13 @@ class Gameover(cocos.layer.ColorLayer):
                                 color=define.MAROON)
         text.position = window_width // 2 - window_width // 8, window_height // 2 + window_height // 16
         self.add(text)
-        text = cocos.text.Label('click or press J key to replay,',
+        text = cocos.text.Label('   J or Click    -    Restart Game',
                                 font_name='SimHei',
                                 font_size=48,
                                 color=define.MAROON)
         text.position = window_width // 2 - window_width // 4, window_height // 2 - window_height // 16
         self.add(text)
-        text = cocos.text.Label('or press BACKSPACE key to go back...',
+        text = cocos.text.Label('BACKSPACE - Back to Homepage',
                                 font_name='SimHei',
                                 font_size=48,
                                 color=define.MAROON)

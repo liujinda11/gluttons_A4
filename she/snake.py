@@ -29,7 +29,7 @@ class Snake(cocos.cocosnode.CocosNode):
         else:
             self.position = random.randrange(define.WIDTH // 2 - 100, define.WIDTH // 2 + 100), \
                 random.randrange(define.HEIGHT // 2 - 50, define.HEIGHT // 2 + 50)
-            print("successfully generate player snake")
+            # print("successfully generate player snake")
 
         self.is_enemy = is_enemy
 
@@ -114,8 +114,9 @@ class Snake(cocos.cocosnode.CocosNode):
         # 更新蛇的身体列表，加入新的身体部分
         # """
         if not self.is_enemy:
-            print(new_body_part.scale)
-            print("player's body extended")
+            # print(new_body_part.scale)
+            # print("player's body extended")
+            pass
         # """
         self.body.append(new_body_part)
         # 更新头部大小
