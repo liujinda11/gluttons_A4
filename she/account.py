@@ -1,3 +1,7 @@
+# 在control mode里面
+# 0 代表是keyboard
+# 1 代表是mouse
+
 import mysql.connector
 
 
