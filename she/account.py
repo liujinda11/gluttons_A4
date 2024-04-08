@@ -4,7 +4,7 @@
 
 import mysql.connector
 
-
+#新建用户
 def insert_account(username, password):
     try:
         conn = mysql.connector.connect(
@@ -30,7 +30,7 @@ def insert_account(username, password):
         return False
 
 
-
+#更新最高分
 def update_score(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -56,7 +56,7 @@ def update_score(username,update_value):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-
+#应该没用
 def add_balance(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -81,7 +81,7 @@ def add_balance(username,update_value):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-        
+#应该没用     
 def reduce_balance(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -108,7 +108,7 @@ def reduce_balance(username,update_value):
         print("Failed to connect the database", error)
         return False
 
-#used for login
+#查找是否存在改用户
 def match_user_information(username,password):
     try:
         conn = mysql.connector.connect(
@@ -139,7 +139,7 @@ def match_user_information(username,password):
 
 
 
-
+#输出排名表
 def get_ranking():
     try:
         conn = mysql.connector.connect(
@@ -170,7 +170,7 @@ def get_ranking():
         print("Failed to connect the database", error)
         return False
 
-
+#应该没用
 def get_customization(username,custn):
     try:
         conn = mysql.connector.connect(
@@ -207,7 +207,7 @@ def get_customization(username,custn):
 
 
 
-
+#应该没用
 def if_has_customization(username,custn):
     try:
         conn = mysql.connector.connect(
@@ -246,7 +246,7 @@ def if_has_customization(username,custn):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         
-        
+#换数据库里的装        
 def change_cust(username,custn):
     try:
         conn = mysql.connector.connect(
@@ -275,7 +275,7 @@ def change_cust(username,custn):
 
 
 
-
+#换数据库里的音乐
 def change_music(username, music):
     try:
         conn = mysql.connector.connect(
@@ -302,7 +302,7 @@ def change_music(username, music):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-
+#换数据库里的音乐音量
 def change_volume(username, change_volume):
     try:
         conn = mysql.connector.connect(
@@ -329,7 +329,7 @@ def change_volume(username, change_volume):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-        
+#换数据库里的effect音量        
 def change_evolume(username, change_volume):
     try:
         conn = mysql.connector.connect(
@@ -359,7 +359,7 @@ def change_evolume(username, change_volume):
         
 
 
-
+#输出现有的用户条
 def current_state(username):
     try:
         conn = mysql.connector.connect(
@@ -387,7 +387,7 @@ def current_state(username):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-        
+#改数据库里的control mode        
 def change_cmode(username, control):
     try:
         conn = mysql.connector.connect(
@@ -420,7 +420,7 @@ def change_cmode(username, control):
         
 
 
-change_evolume('user1',0.5)
+#change_evolume('user1',0.5)
 v= current_state('user1')
 print(v)
 
