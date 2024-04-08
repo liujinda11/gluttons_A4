@@ -1,9 +1,6 @@
 #add import
 from account import insert_account,update_score,match_user_information,get_ranking,change_cust,change_music,change_volume,change_evolume,current_state,change_cmode
 
-from account import current_state,change_cmode,change_music,change_volume,change_evolume
-
-
 import cocos
 from cocos.director import director
 from cocos.scene import Scene
@@ -583,7 +580,7 @@ class Settings(Scene):
     is_event_handler = True  # 允许层接收事件
 
     def __init__(self):
-        super(SettingsLayer, self).__init__()
+        super(Settings, self).__init__()
         
         self.username = 'User1'
         self.music_volume = current_state(self.username)[4]
