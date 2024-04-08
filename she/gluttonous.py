@@ -12,6 +12,9 @@ import define
 from arena import Arena
 from gameover import Gameover
 
+#add import
+from account import insert_account,update_score,match_user_information,get_ranking,change_cust,change_music,change_volume,change_evolume,current_state,change_cmode
+
 
 class GameStartScene(Scene):
 
