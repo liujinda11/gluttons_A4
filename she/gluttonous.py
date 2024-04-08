@@ -268,6 +268,9 @@ class MainMenu(cocos.menu.Menu):
         # 进入设置界面
         self.selected_item = 'Settings'
         print("Selected item:", self.selected_item)
+        self.set_enabled(False)
+        settings_scene = cocos.scene.Scene(SettingsLayer())
+        cocos.director.director.replace(settings_scene)
 
     def on_exit_the_game(self):
         # 退出游戏
@@ -381,6 +384,153 @@ class ColorMenuItem(MenuItem):
 
 
 # 程序从这里开始
+
+#我添加的class
+class SettingsLayer(Layer):
+    is_event_handler = True  # 允许层接收事件
+
+    def __init__(self):
+        super(SettingsLayer, self).__init__()
+        
+        self.music_volume = current_state(self.username)[4]
+        self.effect_volume = current_state(self.username)[11]
+        if current_state(self.username)[3]==0:
+            self.music_name = 'VCR'
+        else:
+            self.music_name = 'happy'
+        if current_state(self.username)[12]==0:
+            self.control_mode = 'Keyboard'
+        else:
+            self.control_mode = 'Mouse'
+        self.build_menu()
+
+    def build_menu(self):
+        # 按键部分.
+        increase_effect_volume_item = MenuItem("+", self.on_increase_effect_volume)
+        decrease_effect_volume_item = MenuItem("-", self.on_decrease_effect_volume)
+        increase_music_volume_item = MenuItem("+", self.on_increase_music_volume)
+        decrease_music_volume_item = MenuItem("-", self.on_decrease_music_volume)
+        change_mode_item = MenuItem("Change Control Mode", self.on_change_control_mode)
+        change_music_item = MenuItem("Change Music", self.on_change_music)
+        return_item = MenuItem("Return to Homepage",self.on_return)
+        items = [increase_effect_volume_item, decrease_effect_volume_item,
+                 increase_music_volume_item, decrease_music_volume_item,
+                 change_mode_item,change_music_item, return_item]
+        positions = [(director.window.width // 2+300,director.window.height // 2 + 150),
+                     (director.window.width // 2+120,director.window.height // 2 + 150),
+                     (director.window.width // 2+300,director.window.height // 2 + 100),
+                     (director.window.width // 2+120,director.window.height // 2 + 100),
+                     (director.window.width // 2+500,director.window.height // 2 + 50),
+                     (director.window.width // 2+500,director.window.height // 2),
+                     (director.window.width // 2,director.window.height // 2 - 500)]
+
+        
+        self.menu = Menu()
+        self.menu.create_menu(items,layout_strategy=cocos.menu.fixedPositionMenuLayout(positions),selected_effect=zoom_in(), unselected_effect=zoom_out())  # Disable automatic layout.
+        self.add(self.menu, z=1)
+        # Example: Centering the menu while ensuring it's fully visible
+        '''
+        window_width, window_height = director.window.width, director.window.height
+        menu_width, menu_height = self.menu.width, self.menu.height  # You might need to calculate or estimate these
+        self.menu.position = ((window_width - menu_width) // 2, (window_height - menu_height) // 2)
+        '''
+        # 一般显示标签部分
+        self.effect_volume_label = Label('Effect Volume:            {:.1f}'.format(self.effect_volume),
+                                         position=(director.window.width // 2, director.window.height // 2 + 150),
+                                         font_size=32,
+                                         anchor_x='center', anchor_y='center')
+        self.music_volume_label = Label('Music Volume:            {:.1f}'.format(self.music_volume),
+                                        position=(director.window.width // 2, director.window.height // 2 + 100),
+                                        font_size=32,
+                                        anchor_x='center', anchor_y='center')
+        self.control_mode_label = Label('Control Mode: {}  '.format(self.control_mode),
+                                        position=(director.window.width // 2, director.window.height // 2 + 50),
+                                        font_size=32,
+                                        anchor_x='center', anchor_y='center')
+        self.music_name_label = Label('Music Name: {}       '.format(self.music_name),
+                                        position=(director.window.width // 2, director.window.height // 2),
+                                        font_size=32,
+                                        anchor_x='center', anchor_y='center')
+       
+        self.add(self.effect_volume_label,z=0)
+        self.add(self.music_volume_label,z=0)
+        self.add(self.control_mode_label,z=0)
+        self.add(self.music_name_label,z=0)
+
+
+
+        #音乐播放部分
+        music_file = 'VCR.mp3'
+        if os.path.exists(music_file):
+            pygame.mixer.music.load(music_file)
+            pygame.mixer.music.set_volume(self.music_volume)
+            pygame.mixer.music.play(-1)
+        
+
+
+    def on_increase_effect_volume(self):
+        if self.effect_volume <= 0.9:
+            self.effect_volume += 0.1
+        self.update_ui()
+
+    def on_decrease_effect_volume(self):
+        if self.effect_volume >= 0.1:
+            self.effect_volume -= 0.1
+        self.update_ui()
+        
+    def on_increase_music_volume(self):
+        if self.music_volume <= 0.9:
+            self.music_volume += 0.1
+            pygame.mixer.music.set_volume(self.music_volume)
+        self.update_ui()
+            
+    def on_decrease_music_volume(self):
+        if self.music_volume >= 0.1:
+            self.music_volume -= 0.1
+            pygame.mixer.music.set_volume(self.music_volume)
+        self.update_ui()
+
+    def on_change_control_mode(self):
+        if self.control_mode == 'Keyboard':
+            self.control_mode = 'Mouse'
+        else:
+            self.control_mode = 'Keyboard'
+        self.update_ui()
+
+    def on_change_music(self):
+        if self.music_name == 'VCR':
+            self.music_name = 'happy'
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('happy.mp3')
+            pygame.mixer.music.play(-1)
+
+        else:
+            self.music_name = 'VCR'
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('VCR.mp3')
+            pygame.mixer.music.play(-1)
+        self.update_ui()
+
+    def update_ui(self):
+        self.effect_volume_label.element.text = 'Effect Volume:            {:.1f}'.format(self.effect_volume)
+        self.music_volume_label.element.text = 'Music Volume:            {:.1f}'.format(self.music_volume)
+        self.control_mode_label.element.text = 'Control Mode: {}  '.format(self.control_mode)
+        self.music_name_label.element.text = 'Music Name: {}       '.format(self.music_name)
+
+    def on_return(self):
+        #存储self.music_volume, self.effect_volume, self.music_name, self.control_mode
+        change_volume(username,self.music_volume)
+        change_evolume(username,self.effect_volume)
+        if self.music_name == 'VCR':
+            change_music(username,0)
+        else:
+            change_music(username,1)
+        if self.control_mode == 'Keyboard':
+            change_cmode(username,0)
+        else:
+            change_cmode(username,1)
+        main_menu_scene = cocos.scene.Scene(MainMenu())
+        cocos.director.director.replace(main_menu_scene)
 
 
 if __name__ == "__main__":
