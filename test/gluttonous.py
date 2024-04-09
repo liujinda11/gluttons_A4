@@ -8,12 +8,14 @@ from cocos.actions import CallFunc
 import pyglet
 from pyglet.window import key
 from sys import platform
-
+#from account import insert_account,update_score,match_user_information,get_ranking,change_cust,change_music,change_volume,change_evolume,current_state,change_cmode
 import define
 from arena import Arena
 from gameover import Gameover
 # hqc 20240408.21新增
 from snake import SkinManager
+#import account
+#from account import insert_account,update_score,match_user_information,get_ranking,change_cust,change_music,change_volume,change_evolume,current_state,change_cmode
 
 
 """
@@ -601,72 +603,83 @@ class PauseMenu(Layer):  # 暂停面板部分只解决鼠标点击的问题，�
         print("Returning to GameStartScene from PauseMenu by ESC...\n")
         director.pop()
 
-
-class ShopMenu(Layer):
+class Shop(Scene):
     def __init__(self, skin_manager):
-        super(ShopMenu, self).__init__()
-        self.skin_manager = skin_manager
+        super(Shop, self).__init__()
+
         self.selected_skin = None
+        #self.username = username
+        self.username = 'user1'
+        self.skin_manager = skin_manager(self.username)
 
-        self.create_background()
-        self.create_title()
-        self.create_skin_options()
-        self.create_menu()
-
-    def create_background(self):
         window_width, window_height = director.get_window_size()
-        background_width, background_height = window_width // 2, window_height // 2
 
-        background_color_layer = ColorLayer(128, 128, 128, 128,
-                                            width=background_width, height=background_height)
-        background_color_layer.position = (window_width // 2 - background_width // 2,
-                                           window_height // 2 - background_height // 2)
-        self.add(background_color_layer)
-        self.background_layer = background_color_layer
+        # 加载背景图片并设置透明度
+        background = cocos.sprite.Sprite('background.jpg')
+        background.opacity = 128  # 设置透明度,范围是0到255,数值越小越透明
+        background.position = (window_width * 0.5, window_height * 0.5)
+        self.add(background, z=-1)  # 将背景图片添加到场景中,设置z值为-1确保它在其他元素下面
 
-    def create_title(self):
-        window_width, window_height = director.get_window_size()
-        background_width, background_height = window_width // 2, window_height // 2
 
-        self.title_label = Label('商店',
+        self.title_label = Label('Shop',
                                  font_name='Times New Roman',
-                                 font_size=48,
+                                 font_size=72,
                                  anchor_x='center', anchor_y='center')
-        self.title_label.position = background_width // 2, background_height - window_height // 16
-        self.background_layer.add(self.title_label)
+        self.title_label.position = (window_width * 0.5, window_height * 0.75)
+        self.add(self.title_label, z=0)
 
-    def create_skin_options(self):
-        self.skin_options = []
-        for skin_name, skin in self.skin_manager.skins.items():
-            menu_item = MenuItem(skin_name, lambda x=skin_name: self.on_skin_selected(x))
-            self.skin_options.append(menu_item)
-        self.skin_options.append(MenuItem('返回', self.on_back))
+        # 获取用户当前选择的蛇皮肤
+        current_skin = self.skin_manager.current_skin
+        self.selected_skin_label = Label(f"Selected: {current_skin.name}",
+                                         font_name='Times New Roman',
+                                         font_size=36,
+                                         anchor_x='center', anchor_y='center')
+        self.selected_skin_label.position = (window_width * 0.5, window_height * 0.685)
+        self.add(self.selected_skin_label, z=1)
 
-    def on_skin_selected(self, skin_name):
-        try:
-            self.skin_manager.set_current_skin(skin_name)
-            print(f"选择的皮肤: {skin_name}")
-        except ValueError as e:
-            print(e)
+        skin_options = [
+            MenuItem('LitteBrotherSnake', lambda: self.on_skin_selected(self.skin_manager.skins[0], 0)),
+            MenuItem('FireSnake', lambda: self.on_skin_selected(self.skin_manager.skins[1], 1)),
+            MenuItem('IceSnake', lambda: self.on_skin_selected(self.skin_manager.skins[2], 2)),
+            MenuItem('MagicSnake', lambda: self.on_skin_selected(self.skin_manager.skins[3], 3)),
+            MenuItem('Goback', self.on_back)
+        ]
+
+        self.menu = Menu()
+        self.menu.create_menu(skin_options, selected_effect=zoom_in(),
+                              unselected_effect=zoom_out())
+        self.menu.position = (0, window_height * 0.05)
+        self.add(self.menu, z=3)
+
+    def on_skin_selected(self, skin, skin_number):
+        self.selected_skin = skin
+        print(f"skin: {skin.name}")
+        self.skin_manager.current_skin = skin
+
+        self.selected_skin_label.element.text = f"Selected: {skin.name}"
+        # 调用更新函数change_cust更新数据库中的皮肤选择
+        change_cust(self.username, skin_number)
+
 
     def on_back(self):
-        # 假设你在别处定义了一个MainMenu类
-        homepage_scene = Scene(HomepageScene)
-        director.push(homepage_scene)
+        
+        homepage_scene = HomepageScene()
+        director.replace(homepage_scene)
 
 
+'''
 class Shop(Scene):
     def __init__(self, skin_manager):
         super(Shop, self).__init__()
         shop_menu_layer = ShopMenu(skin_manager)
         self.add(shop_menu_layer)
-
+'''
 
 # 程序从这里开始
 
 
 if __name__ == "__main__":
-    cocos.director.director.init(width=2400, height=1600, caption="原神.exe", fullscreen=True)  # 记得改游戏界面大小
+    cocos.director.director.init(width=2000, height=1200, caption="原神.exe", fullscreen= False)  # 记得改游戏界面大小
     cocos.director.director.run(GameStartScene())
 
 # width=screen_width, height=screen_height

@@ -3,41 +3,41 @@ import math
 import random
 import cocos
 from cocos.sprite import Sprite
-
+import cocos
+from cocos.director import director
 import define
 from dot import Dot
+import account
+from account import insert_account,update_score,match_user_information,get_ranking,change_cust,change_music,change_volume,change_evolume,current_state,change_cmode
 
+#cust_number = current_state(self.username)[9]
+
+class SnakeSkin:
+    def __init__(self, name, color):
+        self.name = name
+        self.color = color
 
 class SkinManager:
-    class SnakeSkin:
-        def __init__(self, name, color):
-            self.name = name
-            self.color = color
-
-    def __init__(self):
-        self.current_skin = None
-        self.skins = {define.BLACK}  # 改为使用字典
-
-    def add_skin(self, name, color):
-        if name in self.skins:
-            raise ValueError(f"Skin with name '{name}' already exists.")
-        new_skin = self.SnakeSkin(name, color)
-        self.skins[name] = new_skin
-
-    def get_skin_by_name(self, name):
-        skin = self.skins.get(name)
-        if skin is None:
-            raise ValueError(f"No skin with name '{name}' found.")
-        return skin
-
-    def set_current_skin(self, name):
-        self.current_skin = self.get_skin_by_name(name)
+    def __init__(self, username):
+        self.skins = [
+            SnakeSkin('LitterSnake', (0, 0, 0)),
+            SnakeSkin('FireSnake', (255, 0, 0)), 
+            SnakeSkin('IceSnake', (0, 0, 255)),
+            SnakeSkin('MagicSnake', random.choice(define.ALL_COLOR))
+        ]
+	
+        self.username = username
+        self.current_skin = self.get_current_skin()
 
     def get_current_skin(self):
-        if self.current_skin is None:
-            return None  # 或者返回一个默认的皮肤
-        return self.current_skin
-
+        cust_number = self.get_current_cust_number()
+        return self.skins[cust_number]
+    def get_current_cust_number(self):
+        cust_number = current_state(self.username)[9]
+        #cust_number = 3
+        if cust_number is None:
+            return 0  # 默认为黑色
+        return cust_number
 
 class Snake(cocos.cocosnode.CocosNode):
     no = 0
@@ -57,8 +57,16 @@ class Snake(cocos.cocosnode.CocosNode):
         self.paused = False
         self.angle = random.randrange(360)  # 目前角度
         self.angle_dest = self.angle  # 目标角度
-        self.color = random.choice(define.ALL_COLOR)
-        self.no = Snake.no
+        self.username = 'user1'
+
+
+
+        if not is_enemy:
+            self.skin_manager = SkinManager(self.username)
+            self.color = self.skin_manager.current_skin.color
+        else:
+            self.color = random.choice(define.ALL_COLOR)
+
         Snake.no += 1
 
         if is_enemy:
@@ -392,3 +400,5 @@ class Snake(cocos.cocosnode.CocosNode):
                 del self
             else:
                 arena.parent.end_game()
+
+
