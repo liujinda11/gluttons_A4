@@ -162,10 +162,8 @@ def get_ranking():
         cursor.close()
         conn.close()
            # print("username\thighest_score\tranking")
-        for row in results:
-            username, highest_score, ranking = row
-            #  print(f"{username}\t\t{highest_score}\t\t{ranking}")
-            return username, highest_score, ranking
+       
+        return results
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
