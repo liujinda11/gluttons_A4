@@ -1,0 +1,13 @@
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall
+
+TARGET = 1
+SRCS = 1.cpp
+
+$(TARGET): $(SRCS)
+    $(CXX) $(CXXFLAGS) -o $@ $^
+
+.PHONY: clean
+
+clean:
+    rm -f $(TARGET)
