@@ -14,7 +14,7 @@ def insert_account(username, password):
             database="CSCI3100"
         )
         cursor = conn.cursor()
-        query = "INSERT INTO User (username, password,highest_score,music,volume,Cust1,Cust2,Cust3,Cust4,Curren_Cust,balance,e_volumn, control_mode) VALUES (%s,%s,0,0,0.5,1,0,0,0,1,0,0.5,0)"
+        query = "INSERT INTO User (username, password,highest_score,music,volume,Cust1,Cust2,Cust3,Cust4,Curren_Cust,balance,e_volume, control_mode) VALUES (%s,%s,0,0,0.5,1,0,0,0,1,0,0.5,0)"
         data = (username, password)
         cursor.execute(query, data)
 
