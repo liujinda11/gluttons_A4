@@ -400,6 +400,23 @@ class MainMenu(cocos.menu.Menu):
         print("Home page and main menu...\n\n\n")
         print(f"Received username: {self.username}")
         print(f"Received user_type: {self.user_type}")
+        
+        #音乐播放部分
+        if self.user_type == 'guest':
+            music_file = 'VCR.mp3'
+            self.music_volume = 0.5
+        else:
+            self.music_volume = current_state(self.username)[4]
+            if current_state(self.username)[3]==0:
+                music_file = 'VCR.mp3'
+            else:
+                music_file = 'happy.mp3'
+        pygame.init()
+        pygame.mixer.init()
+        if os.path.exists(music_file):
+            pygame.mixer.music.load(music_file)
+            pygame.mixer.music.set_volume(self.music_volume)
+            pygame.mixer.music.play(-1)
 
         main_menu_items = [
             cocos.menu.MenuItem('Classic Mode', lambda: self.select_mode('Classic Mode')),
@@ -437,9 +454,11 @@ class MainMenu(cocos.menu.Menu):
             shop_scene = cocos.scene.Scene(Shop(self.username, self.user_type))
             cocos.director.director.replace(shop_scene)
         elif mode_name == 'Settings':
+            pygame.mixer.music.stop()
             settings_scene = cocos.scene.Scene(Settings(self.username, self.user_type))
             cocos.director.director.replace(settings_scene)
         elif mode_name == 'Log out':
+            pygame.mixer.music.stop()
             auth_scene = cocos.scene.Scene(AuthScene())
             cocos.director.director.replace(auth_scene)
             print('Log out...\n')
@@ -1015,9 +1034,9 @@ class Settings(Scene):
         self.music_volume = current_state(self.username)[4]
         self.effect_volume = current_state(self.username)[11]
         if current_state(self.username)[3] == 0:
-            self.music_name = 'VCR'
+            self.music_file = 'VCR.mp3'
         else:
-            self.music_name = 'happy'
+            self.music_file = 'happy.mp3'
         if current_state(self.username)[12] == 0:
             self.control_mode = 'Keyboard'
         else:
@@ -1077,7 +1096,7 @@ class Settings(Scene):
                                         position=(director.window.width * 0.2, director.window.height * 0.4),
                                         font_size=32,
                                         anchor_x='left', anchor_y='center')
-        self.music_name_label = Label('Music Name: {}       '.format(self.music_name),
+        self.music_name_label = Label('Music Name: {}       '.format(self.music_file),
                                       position=(director.window.width * 0.2, director.window.height * 0.3),
                                       font_size=32,
                                       anchor_x='left', anchor_y='center')
@@ -1090,9 +1109,8 @@ class Settings(Scene):
         # 音乐播放部分
         pygame.init()
         pygame.mixer.init()
-        music_file = 'VCR.mp3'
-        if os.path.exists(music_file):
-            pygame.mixer.music.load(music_file)
+        if os.path.exists(self.music_file):
+            pygame.mixer.music.load(self.music_file)
             pygame.mixer.music.set_volume(self.music_volume)
             pygame.mixer.music.play(-1)
 
@@ -1126,15 +1144,15 @@ class Settings(Scene):
         self.update_ui()
 
     def on_change_music(self):
-        if self.music_name == 'VCR':
-            self.music_name = 'happy'
+        if self.music_file == 'VCR.mp3':
+            self.music_file = 'happy.mp3'
             pygame.mixer.music.stop()
-            pygame.mixer.music.load('happy.mp3')
+            pygame.mixer.music.load(self.music_file)
             pygame.mixer.music.play(-1)
         else:
-            self.music_name = 'VCR'
+            self.music_file = 'VCR.mp3'
             pygame.mixer.music.stop()
-            pygame.mixer.music.load('VCR.mp3')
+            pygame.mixer.music.load(self.music_file)
             pygame.mixer.music.play(-1)
         self.update_ui()
 
@@ -1142,14 +1160,14 @@ class Settings(Scene):
         self.effect_volume_label.element.text = 'Effect Volume:            {:.1f}'.format(self.effect_volume)
         self.music_volume_label.element.text = 'Music Volume:            {:.1f}'.format(self.music_volume)
         self.control_mode_label.element.text = 'Control Mode: {}  '.format(self.control_mode)
-        self.music_name_label.element.text = 'Music Name: {}       '.format(self.music_name)
+        self.music_name_label.element.text = 'Music Name: {}       '.format(self.music_file)
 
 
     def on_return(self):
         # 存储self.music_volume, self.effect_volume, self.music_name, self.control_mode
         change_volume(self.username, self.music_volume)
         change_evolume(self.username, self.effect_volume)
-        if self.music_name == 'VCR':
+        if self.music_file == 'VCR.mp3':
             change_music(self.username, 0)
         else:
             change_music(self.username, 1)
@@ -1157,6 +1175,7 @@ class Settings(Scene):
             change_cmode(self.username, 0)
         else:
             change_cmode(self.username, 1)
+        pygame.mixer.music.stop()
         main_menu_scene = cocos.scene.Scene(MainMenu(self.username, self.user_type))
         cocos.director.director.replace(main_menu_scene)
         
