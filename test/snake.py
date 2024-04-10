@@ -40,6 +40,7 @@ class SkinManager:
         print(f"Current cust_number: {cust_number}")
         if cust_number is None:
             cust_number = 0  # 如果没有自定义皮肤,则默认为0
+            change_cust(self.username, skin_number)
         return int(cust_number)
 
 
