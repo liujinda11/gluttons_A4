@@ -1,0 +1,13 @@
+username: 111
+password: 111
+highest_score: 0
+music: 0
+volume: 0.5
+Cust1: 1
+Cust2: 0
+Cust3: 0
+Cust4: 0
+Curren_Cust: 1
+balance: 0
+e_volume: 0.5
+control_mode: 0
