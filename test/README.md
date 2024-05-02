@@ -152,3 +152,13 @@ Players can adjust their settings here, including sound level and background mus
 
 *pause
 The user can pause the game at any time during the game. The current score can be viewed during pause, and the option to restart the game/exit the game is also available.
+
+
+Regardless of the original or new version, this is how you can run it on Ubuntu: In a command prompt.
+
+1. Install python: sudo apt update sudo apt install python3
+2. Install various packages: pip install pygame pip install cocos (actually cocos2d) pip install pyglet Here's how to import a stable version of the game: pip install pyglet==1.5.21 cocos2d==0.6.9
+3. Interpret the python file: python3 gluttonous.py
+Then use keyboard and mouse to operate the game.
+
+Note: The game is in fullscreen mode by default, if you need to see the console output to debug your code, remember to put cocos.director.director.init(width=2400, height=1600, caption=“ProtoGod.exe”, fullscreen=True) in the main function of gluttonous.py. fullscreen=True) in the fullscreen parameter is changed to False
