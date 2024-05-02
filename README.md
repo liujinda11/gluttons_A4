@@ -32,22 +32,27 @@ As well, the user has the option to experience our base game (only “Classic Mo
 
 （2）Games Home
 
-1. different mode
+1. different mode：
+   
 We have several game modes. In addition to the classic game modes, there is also an infinite mode,
 
 Classic Mode: There are three difficulties with different movement speeds, score ratios, and number of enemies, allowing users to debug according to their needs.
 Infinite Mode: Players need to survive as long as possible! Enemies will spawn indefinitely, try to get the highest score in a non-stop game!
 
-2. shop
+2. shop：
+
 Players can change the skin for their game characters on this page to have a more diversified gaming experience!
 
-3. rank
+3. rank：
+
 Users can check out the top ranked players here. Work hard to become a master of Gluttony!  
 
-4. setting
+4. setting：
+
 Players can adjust their settings here, including sound level and background music. The database will save the settings before the user logs out.
 
 *pause
+
 The user can pause the game at any time during the game. The current score can be viewed during pause, and the option to restart the game/exit the game is also available.
 
 
