@@ -126,12 +126,15 @@ https://www.bilibili.com/video/BV12T4y1h7Zk/?spm_id_from=333.788.recommend_more_
 
 
 snake.io
+
 This is a casual game. The main game mode is to maneuver the snake to swallow the fruit to get points, grow the body, avoid the head to touch the enemy and the border at the same time, the player needs to do their best to destroy all the enemies with the snake's body.
 
-login/register page
+（1）login/register page
+
 Users can create accounts and log in with existing accounts. The game stores all records of the user's previous play in a database and the player can continue their game! As well, the user has the option to experience our base game (only “Classic Mode”, no other features) with a “Guest Login”.
 
-Games Home
+（2）Games Home
+
 1. different mode
 We have several game modes. In addition to the classic game modes, there is also an infinite mode,
 
