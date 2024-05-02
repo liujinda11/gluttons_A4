@@ -122,3 +122,30 @@ define.py
 三个级别
 https://www.bilibili.com/video/BV12T4y1h7Zk/?spm_id_from=333.788.recommend_more_video.10&vd_source=9dd862afa0c8cef53c73256400624867
 配乐
+
+
+
+snake.io
+This is a casual game. The main game mode is to maneuver the snake to swallow the fruit to get points, grow the body, avoid the head to touch the enemy and the border at the same time, the player needs to do their best to destroy all the enemies with the snake's body.
+
+login/register page
+Users can create accounts and log in with existing accounts. The game stores all records of the user's previous play in a database and the player can continue their game! As well, the user has the option to experience our base game (only “Classic Mode”, no other features) with a “Guest Login”.
+
+Games Home
+1. different mode
+We have several game modes. In addition to the classic game modes, there is also an infinite mode,
+
+Classic Mode: There are three difficulties with different movement speeds, score ratios, and number of enemies, allowing users to debug according to their needs.
+Infinite Mode: Players need to survive as long as possible! Enemies will spawn indefinitely, try to get the highest score in a non-stop game!
+
+2. shop
+Players can change the skin for their game characters on this page to have a more diversified gaming experience!
+
+3. rank
+Users can check out the top ranked players here. Work hard to become a master of Gluttony!  
+
+4. setting
+Players can adjust their settings here, including sound level and background music. The database will save the settings before the user logs out.
+
+*pause
+The user can pause the game at any time during the game. The current score can be viewed during pause, and the option to restart the game/exit the game is also available.
