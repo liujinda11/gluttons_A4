@@ -9,11 +9,11 @@ snake.io
 
 Game Controls
 
-   Change Direction: Use Arrow Keys or WASD
+   ·Change Direction: Use Arrow Keys or WASD
    
-   SPACE: Toggle pause and resume the game.
+   ·SPACE: Toggle pause and resume the game.
    
-   J: Restart the game from any state.
+   ·J: Restart the game from any state.
    
    BACKSPACE: Return to the homepage scene from the game or pause menu.
 
