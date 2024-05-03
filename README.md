@@ -3,11 +3,11 @@
 
 
 
-snake.io:Gluttonous Snake Game
+**snake.io:Gluttonous Snake Game**
 
    Welcome to the Gluttonous Snake Game! Dive into a world where you control a snake to eat fruit, grow longer, and dodge enemies. This README provides all the details you need to start playing, including installation instructions, game modes, controls, and more.
 
-Game Controls
+**Game Controls**
 
    ·Change Direction: Use the Arrow Keys or WASD.
    
@@ -27,7 +27,7 @@ Game Controls
 
 （2）Games Home
 
-1. different mode：
+**1. different mode：**
    
    We have several game modes. In addition to the classic game modes, there is also an infinite mode,
    
@@ -38,24 +38,24 @@ Game Controls
    · Infinite Mode:
       Description: Continuously evade enemies and aim for the highest score in an endless survival challenge.
    
-2. Shop：
+**2. Shop：**
 
    Customize your snake with various skins available for purchase in the game shop to enhance your gaming experience.
 
-3. Rankings：
+**3. Rankings：**
 
    Check out the leaderboard to see top scores and compete with other players.
 
-4. Settings：
+**4. Settings：**
 
    Adjust game settings like sound level and background music. Settings are saved automatically.
 
-5. Pause Menu
+**5. Pause Menu：**
 
    Pause the game at any time to view current scores or to restart/exit the game.
 
 
-Installation (Ubuntu):
+**Installation (Ubuntu):**
 
    To run the game on Ubuntu, follow these steps in a command prompt:
 
@@ -83,7 +83,7 @@ Installation (Ubuntu):
    
    Then use keyboard and mouse to operate the game.
 
-Note: 
+**Note: **
    1. The game is in fullscreen mode by default, if you need to see the console output to debug your code, 
-   remember to put cocos.director.director.init(width=2400, height=1600, caption=“原神.exe”, fullscreen=True) in the main function of gluttonous.py. fullscreen=True) in the fullscreen parameter is changed to False
+   remember to put cocos.director.director.init(width=2400, height=1600, caption=“GluttonousGame.exe”, fullscreen=True) in the main function of gluttonous.py. fullscreen=True) in the fullscreen parameter is changed to False
    2. music：https://www.bilibili.com/video/BV12T4y1h7Zk/?spm_id_from=333.788.recommend_more_video.10&vd_source=9dd862afa0c8cef53c73256400624867
