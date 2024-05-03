@@ -73,5 +73,5 @@ Regardless of the original or new version, this is how you can run it on Ubuntu:
 
 Note: 
    1. The game is in fullscreen mode by default, if you need to see the console output to debug your code, 
-   remember to put cocos.director.director.init(width=2400, height=1600, caption=“ProtoGod.exe”, fullscreen=True) in the main function of gluttonous.py. fullscreen=True) in the fullscreen parameter is changed to False
+   remember to put cocos.director.director.init(width=2400, height=1600, caption=“原神.exe”, fullscreen=True) in the main function of gluttonous.py. fullscreen=True) in the fullscreen parameter is changed to False
    2. music：https://www.bilibili.com/video/BV12T4y1h7Zk/?spm_id_from=333.788.recommend_more_video.10&vd_source=9dd862afa0c8cef53c73256400624867
