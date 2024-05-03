@@ -361,11 +361,11 @@ class MainMenu(cocos.menu.Menu):
             ranking_list_scene = cocos.scene.Scene(RankingList(self.username, self.user_type))
             cocos.director.director.replace(ranking_list_scene)
         elif mode_name == 'Shop':
-            shop_scene = cocos.scene.Scene(Shop(self.username, self.user_type))
+            shop_scene = cocos.scene.Scene(商店(self.username, self.user_type))
             cocos.director.director.replace(shop_scene)
         elif mode_name == 'Settings':
             pygame.mixer.music.stop()
-            settings_scene = cocos.scene.Scene(Settings(self.username, self.user_type))
+            settings_scene = cocos.scene.Scene(设置(self.username, self.user_type))
             cocos.director.director.replace(settings_scene)
         elif mode_name == 'Log out':
             pygame.mixer.music.stop()
@@ -378,18 +378,31 @@ class MainMenu(cocos.menu.Menu):
         init = GameStartScene()
         cocos.director.director.replace(init)
 	    
-class ClassicMode(cocos.layer.Layer):
+class ClassicMode(cocos.layer.Layer):  # The logic of other game modes is the same as here and no special explanation there.
+    """
+    The Classic Mode of the game.
+    """
+	
     is_event_handler = True
 
     def __init__(self, username, user_type):
+		"""
+        Initializes the ClassicMode object.
+
+        Args:
+            username (str): The username of the player.
+            user_type (str): The type of user, e.g., 'guest' or 'registered'.
+        """
         super(ClassicMode, self).__init__()
         self.username = username
         self.user_type = user_type
 
         print("Classic Mode...\n\n\n")
-        self.arena = Arena(self, username,'classic')  # 将username传递给Arena
+		# Create the arena for the game.
+        self.arena = Arena(self, username,'classic')
         self.add(self.arena, 100)
 
+		# Configure the background for displaying scores.
         scores_background_color = define.CUSTOMIZED_PINK
         scores_background_margin = 300  # 背景边距
         scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 120  # Increase background height to accommodate how-to guides
@@ -401,6 +414,7 @@ class ClassicMode(cocos.layer.Layer):
         scores_background.position = (0, 1600 - scores_background_height + scores_background_margin)
         self.add(scores_background, 900)
 
+		# Labels for displaying game status and scores.
         self.your_status_label = cocos.text.Label('    Classic Mode',
                                                   font_name='Arial',
                                                   font_size=48,
@@ -454,32 +468,43 @@ class ClassicMode(cocos.layer.Layer):
         self.guide_label.position = 25, 600
         self.add(self.guide_label, 1000)
 
-        self.player_kills = 0
+        # Initialize player status.
+		self.player_kills = 0
         self.player_speed = 0
         self.update_report()
 
+		# Initialize game over screen.
         self.gameover = Gameover(self.username)
         self.add(self.gameover, 2000)
 
         self.pause_menu = None
         self.paused = False
 
+		# Register keyboard events.
         self.keyboard = key.KeyStateHandler()
         director.window.push_handlers(self.keyboard)    
 
     def update_report(self):
+		"""
+        Update the report of player status and scores.
+        """
+		# Update player kills and speed from the arena
         self.player_kills = self.arena.kills
         self.player_speed = self.arena.snake.speed
 
+		# Update the label showing player's life and speed
         self.ks_label.element.text = f" Your life: 1 | Speed: {int(self.player_speed)}"
 
+		# Retrieve scores from the arena and sort them
         scores = self.arena.get_scores()
         scores.sort(key=lambda x: x[1], reverse=True)
 
+		# Determine the maximum widths for rank, name, and score
         max_rank_width = len(str(max(i + 1 for i in range(len(scores)))))
         max_name_width = max(len(name) for name, _ in scores)
         max_score_width = max(len(f"Score: {score}") for _, score in scores)
 
+		# Update score labels with formatted data
         for i, (name, score) in enumerate(scores):
             rank = i + 1
             formatted_rank = str(rank).rjust(max_rank_width)
@@ -490,11 +515,16 @@ class ClassicMode(cocos.layer.Layer):
                 self.sr_labels[i].element.text = f"{formatted_rank} | {formatted_name} | {formatted_score}"
 
     def end_game(self):
+		"""
+		End the game and display final scores.
+	 	"""
+		# Set game over state and display final score
         self.paused = False
         self.gameover.visible = True
 
         self.current_score = self.arena.snake.score
 
+		# Set record score based on current user type
         if self.user_type == 'guest':
             self.record_score = 0
         else:
@@ -502,16 +532,22 @@ class ClassicMode(cocos.layer.Layer):
             if self.record_score is None:
                 self.record_score = 0
 
+		# Update record score if current score is higher
         if self.current_score >= self.record_score:
             self.record_score = self.current_score
             if self.user_type != 'guest':
                 update_score(self.username, self.current_score)
 
+		# Update gameover screen with scores and pause game
         self.gameover.score.element.text = str(self.current_score)
         self.gameover.record_score.element.text = str(self.record_score)
         self.arena.pause_game()
 
     def on_mouse_press(self, x, y, buttons, modifiers):
+		"""
+  		Handle mouse press events.
+		"""
+		# Restart game if game over, otherwise print message
         if self.gameover.visible:
             self.gameover.visible = False
             self.arena.unschedule(self.arena.update)
@@ -523,6 +559,10 @@ class ClassicMode(cocos.layer.Layer):
             print('   ###   only when you die can you remake...')
 
     def toggle_pause(self):
+		"""
+  		Toggle the pause state of the game.
+		"""
+		# Toggle pause state and manage PauseMenu
         if self.paused:
             print(" # resume\n")
             # Check if PauseMenu is a child node of the current layer
@@ -541,7 +581,11 @@ class ClassicMode(cocos.layer.Layer):
                 self.arena.pause_game()
 
     def on_key_press(self, key, modifiers):
+		"""
+  		Handle key press events.
+		"""
         if not self.gameover.visible:
+			# Handle key presses during gameplay
             if key == pyglet.window.key.SPACE:
                 print("Space - Toggle Pause")
                 self.toggle_pause()
@@ -560,6 +604,7 @@ class ClassicMode(cocos.layer.Layer):
                 cocos.director.director.replace(homepage_scene)
                 return True
         else:
+			# Handle key presses when game is over
             if key == pyglet.window.key.J:
                 print("J - Restart Game (Game Over)...\n")
                 self.restart_game()
@@ -576,6 +621,9 @@ class ClassicMode(cocos.layer.Layer):
         
     
     def restart_game(self):
+		"""
+  		Restart the game.
+  		"""
         if self.pause_menu:
             self.remove(self.pause_menu)
             self.pause_menu = None
@@ -587,7 +635,7 @@ class ClassicMode(cocos.layer.Layer):
         self.update_report()
         self.paused = False
 
-class EasyMode(cocos.layer.Layer):
+class EasyMode(cocos.layer.Layer):  # The game logic is the same as the classic mode, so there will be no further comments here.
     is_event_handler = True
 
     def __init__(self, username, user_type):
@@ -797,7 +845,7 @@ class EasyMode(cocos.layer.Layer):
         self.update_report()
         self.paused = False      
 
-class HardMode(cocos.layer.Layer):
+class HardMode(cocos.layer.Layer):  # The game logic is the same as the classic mode, so there will be no further comments here.
     is_event_handler = True
 
     def __init__(self, username, user_type):
@@ -1006,7 +1054,7 @@ class HardMode(cocos.layer.Layer):
         self.paused = False      
 
 
-class UnlimitedFirepowerMode(cocos.layer.Layer):
+class UnlimitedFirepowerMode(cocos.layer.Layer):  # The game logic is the same as the classic mode, so there will be no further comments here.
     is_event_handler = True
 
     def __init__(self, username, user_type):
