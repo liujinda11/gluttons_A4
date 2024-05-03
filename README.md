@@ -1,25 +1,7 @@
-不论原版新版，在Ubuntu上都可以这样运行：
-在命令提示符中，
-1. 安装python：
-sudo apt update
-sudo apt install python3
-2. 安装各类包：
-pip install pygame
-pip install cocos（实际上是cocos2d）
-pip install pyglet
-这里给出一个能稳定导本游戏的版本的导入方法：
-pip install pyglet==1.5.21 cocos2d==0.6.9
-3. 解释python文件：
-python3 gluttonous.py
-
-然后用键盘、鼠标操作游戏。
-
-注：游戏默认为全屏模式，如果需要查看控制台输出以调试代码的话，
-记得在gluttonous.py的main函数中将cocos.director.director.init(width=2400, height=1600, caption="原神.exe", fullscreen=True)
-中的fullscreen参数改为False
-
 
 ！！！ The final version is in the main branch's test folder ！！！
+
+
 
 snake.io
 
