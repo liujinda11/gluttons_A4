@@ -122,6 +122,7 @@ class AuthScene(cocos.scene.Scene):
         # 添加 AuthLayer
         self.add(AuthLayer(), z=2)
 
+#this 2 classes is to display the login/register page
 class AuthLayer(cocos.menu.Menu):
     def __init__(self):
         super().__init__(" ")
@@ -171,7 +172,7 @@ class AuthMethodLayer(cocos.layer.Layer):
         
         self.add(AuthMethodMenu(type_),z=2)
 
-
+#In this class, we define the interface we need in login/register page
 class AuthMethodMenu(Menu):
     def __init__(self, entry_type):
         super(AuthMethodMenu, self).__init__()
@@ -201,23 +202,23 @@ class AuthMethodMenu(Menu):
         username = self.entered_username
         password = self.entered_password
 
-        # 检查数据库中是否有对应的账号密码
+        # check whether the account input by user exist in database 
         if match_user_information(username, password):
-            # 如果有,则转到Main menu
-            homepage_scene = HomepageScene(username, 'regular')  # 假设登录成功的用户类型为'regular'
+            # if it is valid,transform to Main menu
+            homepage_scene = HomepageScene(username, 'regular')  # assume that the succesful login called 'regular'
             director.replace(homepage_scene)
         else:
-            # 如果没有,显示登录失败的提示
+            # else, we output warning message
             print("Invalid username or password. Please try again.")
 
     def on_register_pressed(self):
         username = self.entered_username
         password = self.entered_password
 
-        # 将新账号密码存入数据库
+        # store the new account into the database
         insert_account(username, password)
 
-        # 转到Main menu
+        # transforme to Main menu
         homepage_scene = HomepageScene(username,'regular' )  # 假设注册成功的用户类型为'regular'
         director.replace(homepage_scene)
 
@@ -284,6 +285,7 @@ class MainMenu(cocos.menu.Menu):
             pygame.mixer.music.set_volume(self.music_volume)
             pygame.mixer.music.play(-1)
 
+	# That we name the buttons in main menu here.    
         main_menu_items = [
             cocos.menu.MenuItem('Easy Mode', lambda: self.select_mode('Easy Mode')),
             cocos.menu.MenuItem('Classic Mode', lambda: self.select_mode('Classic Mode')),
@@ -1559,11 +1561,11 @@ class Settings(Scene):
         director.replace(homepage_scene)
         
 
-# 程序从这里开始
+# program start ! ! !
 
 
 if __name__ == "__main__":
-    cocos.director.director.init(width=2560, height=1600, caption="原神.exe", fullscreen=True)  # 记得改游戏界面大小
+    cocos.director.director.init(width=2560, height=1600, caption="原神.exe", fullscreen=True)  # if you wanna chage the size of the window , adjust the width and height here as you like!
     cocos.director.director.run(GameStartScene())
 
 # width=screen_width, height=screen_height
