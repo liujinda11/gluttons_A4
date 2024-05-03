@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import random
 
-# 定义常量
+# Define constants
 
-# 地图大小
+# Map size
 WIDTH = 2400  # 1600
 HEIGHT = 1600  # 800
 
 PLAYERS_NUM = 21
 
-# 颜色的RGB常量
+# RGB constants for colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 LIGHT_PINK = (255, 182, 193)
@@ -25,7 +25,7 @@ OLIVE = (128, 128, 0)
 CORNISLK = (255, 248, 220)
 ORANGE = (255, 165, 0)
 CORAL = (255, 127, 80)
-# 包含不透明度
+# Contains opacity
 SKY_BLUE = (135, 206, 235, 255)
 GOLD = (255, 215, 0, 255)
 MAROON = (128, 0, 0, 255)
