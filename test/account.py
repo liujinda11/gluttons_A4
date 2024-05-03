@@ -1,10 +1,10 @@
-# 在control mode里面
-# 0 代表是keyboard
-# 1 代表是mouse
+# In control mode
+# 0 means keyboard
+# 1 means mouse
 
 import mysql.connector
 
-#新建用户
+#insert the information of a new user into database
 def insert_account(username, password):
     try:
         conn = mysql.connector.connect(
@@ -30,7 +30,7 @@ def insert_account(username, password):
         return False
 
 
-#更新最高分
+#update the highest score in the database
 def update_score(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -56,7 +56,7 @@ def update_score(username,update_value):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-#应该没用
+#may be useless
 def add_balance(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -81,7 +81,7 @@ def add_balance(username,update_value):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-#应该没用
+#may be useless
 def reduce_balance(username,update_value):
     try:
         conn = mysql.connector.connect(
@@ -108,7 +108,7 @@ def reduce_balance(username,update_value):
         print("Failed to connect the database", error)
         return False
 
-#查找是否存在改用户
+#test whether the information of a user is in databse
 def match_user_information(username,password):
         
 
@@ -141,7 +141,7 @@ def match_user_information(username,password):
         
 
 
-#输出排名表
+#get the username, highest_score and ranking from the database
 def get_ranking():
     try:
         conn = mysql.connector.connect(
@@ -170,7 +170,7 @@ def get_ranking():
         print("Failed to connect the database", error)
         return False
 
-#应该没用
+#may be useless
 def get_customization(username,custn):
     try:
         conn = mysql.connector.connect(
@@ -206,8 +206,7 @@ def get_customization(username,custn):
 
 
 
-
-#应该没用
+#may be useless
 def if_has_customization(username,custn):
     try:
         conn = mysql.connector.connect(
@@ -246,7 +245,7 @@ def if_has_customization(username,custn):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         
-#换数据库里的装
+#change the customization of a user in database(in the shop)
 def change_cust(username, custn):
     try:
         conn = mysql.connector.connect(
@@ -257,7 +256,7 @@ def change_cust(username, custn):
         )
 
         cursor = conn.cursor()
-        custn = int(custn)  # 将 custn 转换为整数
+        custn = int(custn)  # change cust to int
         query = "UPDATE User SET Curren_Cust = %s WHERE username = %s"
         data = (custn, username)
         cursor.execute(query, data)
@@ -275,7 +274,7 @@ def change_cust(username, custn):
 
 
 
-#换数据库里的音乐
+#chang the music in the database(in the setting)
 def change_music(username, music):
     try:
         conn = mysql.connector.connect(
@@ -302,7 +301,7 @@ def change_music(username, music):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-#换数据库里的音乐音量
+#change the music volume in database(in the setting)
 def change_volume(username, change_volume):
     try:
         conn = mysql.connector.connect(
@@ -329,7 +328,7 @@ def change_volume(username, change_volume):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-#换数据库里的effect音量
+#change the effect volume in database(in the setting)
 def change_evolume(username, change_volume):
     try:
         conn = mysql.connector.connect(
@@ -359,7 +358,7 @@ def change_evolume(username, change_volume):
         
 
 
-#输出现有的用户条
+#get all information of a user in database
 def current_state(username):
     try:
         conn = mysql.connector.connect(
@@ -387,7 +386,7 @@ def current_state(username):
     except mysql.connector.Error as error:
         print("Failed to connect the database", error)
         return False
-#改数据库里的control mode
+#change the control mode in database
 def change_cmode(username, control):
     try:
         conn = mysql.connector.connect(
@@ -416,7 +415,7 @@ def change_cmode(username, control):
         return False
         
 
-
+#for test below
 
 #change_evolume('user1',0.5)
 #v= get_ranking()
@@ -426,10 +425,8 @@ def change_cmode(username, control):
 #print(v)
 
 #update_score('user1',10)
-print(current_state('user1'))
+#print(current_state('user1'))
 #print(get_ranking())
 
 
 #change_music('user1',0)
-
-
