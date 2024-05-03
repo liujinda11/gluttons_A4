@@ -21,32 +21,46 @@ from account import current_state,change_cmode,change_music,change_volume,change
 
 
 class GameStartScene(Scene):
-
+    """
+    This class defines the start scene for a game, handling the initial UI
+    setup, animations, and transitions based on user inputs.
+    """
     def __init__(self):
+        # Initialize the parent Scene class
         super(GameStartScene, self).__init__()
 
         print("Game Start Scene...\n\n\n")
 
+        # Labels for start and exit instructions
         self.start_label = None
         self.exit_label = None
 
+        # Initialize the background and labels
         self.setup_background()
         self.setup_labels()
+
+        # Setup a keyboard handler to track key states
         self.keys = pyglet.window.key.KeyStateHandler()
         cocos.director.director.window.push_handlers(self.keys)
+
+        # Schedule periodic tasks
         self.schedule_interval(self.update_label_visibility, 0.5)
         self.schedule(self.check_input)
 
     def setup_background(self):
+        """Set up the background image for the scene."""
         screen_width, screen_height = cocos.director.director.get_window_size()
         background_sprite = cocos.sprite.Sprite("background.jpg")
-        background_sprite.scale_x = background_sprite.width / screen_width
-        background_sprite.scale_y = background_sprite.height / screen_height
+        # Adjust background image to fill screen
+        background_sprite.scale_x = screen_width / background_sprite.width
+        background_sprite.scale_y = screen_height / background_sprite.height
         background_sprite.position = screen_width / 2, screen_height / 2
         self.add(background_sprite, z=0)
 
     def setup_labels(self):
+        """Create and place labels on the scene."""
         screen_width, screen_height = cocos.director.director.get_window_size()
+        # Main game title
         self.create_label('Genshin Impact',
                           144,
                           (0, 255, 0, 255),
@@ -54,6 +68,7 @@ class GameStartScene(Scene):
                           screen_height * 3 / 5,
                           'Comic Sans MS',
                           True)
+        # Start game instruction
         self.start_label = self.create_label('press space key to start',
                                              48,
                                              (127, 255, 255, 255),
@@ -61,6 +76,7 @@ class GameStartScene(Scene):
                                              screen_height / 4,
                                              'Arial',
                                              False)
+        # Exit game instruction
         self.exit_label = self.create_label('or press esc key to exit',
                                             48,
                                             (127, 255, 255, 255),
@@ -70,6 +86,7 @@ class GameStartScene(Scene):
                                             False)
 
     def create_label(self, text, font_size, color, x, y, font_name=None, bold=None):
+        """Helper function to create a label."""
         label = cocos.text.Label(text,
                                  font_size=font_size,
                                  font_name=font_name,
@@ -83,23 +100,25 @@ class GameStartScene(Scene):
         return label
 
     def update_label_visibility(self, dt):
+        """Toggle visibility of labels to create a blinking effect."""
         self.start_label.visible = not self.start_label.visible
         self.exit_label.visible = not self.exit_label.visible
         self.check_start_game()
 
     def check_input(self, dt):
+        """Check for key inputs to transition scenes or execute actions."""
         self.check_start_game()
 
     def check_start_game(self):
+        """Check if the start game key (SPACE) is pressed."""
         if self.keys[pyglet.window.key.SPACE]:
+            # Transition to the authentication scene
             auth_scene = AuthScene()
             cocos.director.director.replace(auth_scene)
-           
-            # homepage_scene = HomepageScene()
-            # cocos.director.director.replace(homepage_scene)
-            self.stop_scheduler()
+            self.stop_scheduler()  # Stop scheduled tasks upon scene change
 
     def stop_scheduler(self):
+        """Unschedule all scheduled tasks."""
         self.unschedule(self.update_label_visibility)
         self.unschedule(self.check_input)
         self.unschedule(self.check_start_game)
@@ -124,53 +143,73 @@ class AuthScene(cocos.scene.Scene):
 
 # this 2 classes is to display the login/register page
 class AuthLayer(cocos.menu.Menu):
+    """
+    AuthLayer is a subclass of cocos.menu.Menu, which provides a menu interface for user authentication options.
+    """
     def __init__(self):
         super().__init__(" ")
 	
+        # Define menu items with their corresponding callback functions
         items = [
             cocos.menu.MenuItem('Login', self.login),
             cocos.menu.MenuItem('Register', self.register),
             cocos.menu.MenuItem('Guest Access', self.guest),
             cocos.menu.MenuItem('Exit the game', self.quit)
         ]
+        
+        # Create the menu with special effects for item selection and deselection
         self.create_menu(items, cocos.menu.shake(), cocos.menu.shake_back())
 
     def login(self):
+        """
+        Transition to the login authentication method scene.
+        """
         auth_method_scene = cocos.scene.Scene(AuthMethodLayer('login'))
         cocos.director.director.replace(auth_method_scene)
 
     def register(self):
+        """
+        Transition to the registration authentication method scene.
+        """
         auth_method_scene = cocos.scene.Scene(AuthMethodLayer('register'))
         cocos.director.director.replace(auth_method_scene)
 
     def guest(self):
+        """
+        Continue as a guest user, transitioning to the homepage scene.
+        """
         print("Continue as Guest selected...\n")
         homepage_scene = HomepageScene('','guest')
         cocos.director.director.replace(homepage_scene)
 
     def quit(self):
+        """
+        Exit the menu and return to the previous scene.
+        """
         print("Exit from user auth option scene...\n")
         cocos.director.director.pop()
 
 
 class AuthMethodLayer(cocos.layer.Layer):
+    """
+    AuthMethodLayer handles the specific authentication method either for login or registration.
+    """
     def __init__(self, type_):
         super().__init__()
         
-        # Creating background sprites
+        # Setup the background with semi-transparency
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] // 2)
         background.opacity = 50  # Set the background transparency to 50
         self.add(background, z=0)
 
-        # Creating title tags
+        # Setup the title label for the authentication layer
         title_label = cocos.text.Label('Authentication', font_name='Arial', font_size=64, anchor_x='center', anchor_y='center')
         title_label.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] * 0.8)
         self.add(title_label, z=1)
 
-        
-        
-        self.add(AuthMethodMenu(type_),z=2)
+        # Add the menu for the authentication method
+        self.add(AuthMethodMenu(type_), z=2)
 
 #In this class, we define the interface we need in login/register page
 class AuthMethodMenu(Menu):
