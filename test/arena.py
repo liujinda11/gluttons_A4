@@ -9,22 +9,22 @@ import string
 from account import update_score
 
 class Arena(cocos.layer.ColorLayer):
-    is_event_handler = True
+    is_event_handler = True  # This makes the class capable of handling events like keyboard inputs.
 
     def __init__(self, parent, username, mode):
+        # Initialize the Arena as a ColorLayer with a white background
         super(Arena, self).__init__(250, 255, 255, 255, define.WIDTH, define.HEIGHT)
 
         self.mode = mode
         self.parent = parent
-        self.food_limit = 200
-        self.current_food_count = 0
+        self.food_limit = 200  # Maximum number of food dots allowed at one time
+        self.current_food_count = 0  # Current number of food dots
 
-        initial_food_count = 50
+        initial_food_count = 50  # Default initial number of food dots
         if self.mode == 'unlimited_firepower':
-            self.initial_food_count = 150
+            initial_food_count = 150  # Increased initial food for this mode
 
-
-        # 根据模式设置食物数量限制
+        # Set food limit based on the game mode
         if self.mode == 'easy':
             self.food_limit = 150
         elif self.mode == 'classic':
@@ -34,100 +34,97 @@ class Arena(cocos.layer.ColorLayer):
         elif self.mode == 'unlimited_firepower':
             self.food_limit = 200
 
-        self.center = (director.get_window_size()[0] / 2, director.get_window_size()[1] / 2)
-        self.batch = cocos.batch.BatchNode()
+        # Calculate center of the screen
+        self.center = (cocos.director.get_window_size()[0] / 2, cocos.director.get_window_size()[1] / 2)
+        self.batch = cocos.batch.BatchNode()  # A batch node to manage multiple children as a single drawing operation
         self.add(self.batch)
 
-        self.snake = Snake(username, mode=self.mode)  # 将username传递给Snake
-        self.add(self.snake, 10000)
+        # Initialize the player's snake
+        self.snake = Snake(username, mode=self.mode)
+        self.add(self.snake, 10000)  # Add with a high z-order to ensure it's drawn on top
         self.snake.init_body()
-        self.kills = 0
+
+        self.kills = 0  # Number of enemy snakes killed by the player
 
         self.enemies = []
+        # Add enemy snakes
         for i in range(define.PLAYERS_NUM - 1):
             self.add_enemy()
 
-        self.keys_pressed = set()
+        self.keys_pressed = set()  # Track keys pressed for controlling the snake
 
-        # 根据模式设置初始食物数量
-        if self.mode == 'easy':
-            initial_food_count = 100
-        elif self.mode == 'classic':
-            initial_food_count = 50
-        elif self.mode == 'hard':
-            initial_food_count = 25
-        elif self.mode == 'unlimited_firepower':
-            initial_food_count = 150
-
+        # Adjust initial food count based on the game mode
         for _ in range(min(initial_food_count, self.food_limit)):
             self.add_food()
 
-        self.schedule(self.update)
+        self.schedule(self.update)  # Schedule regular updates
 
     def add_enemy(self):
-        # 生成一个随机的用户名
+        # Generate a random username for enemy snakes
         username = 'Enemy_' + ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-        enemy = Snake(username, mode=self.mode, is_enemy=True)  # 将随机生成的用户名传递给Snake
+        enemy = Snake(username, mode=self.mode, is_enemy=True)
         self.add(enemy, 10000)
-        enemy.init_enemy_position()  # 在添加到场景后进行敌人位置的初始化
+        enemy.init_enemy_position()
         enemy.init_body()
         self.enemies.append(enemy)
 
     def pause_dots(self):
+        # Pause all food dots
         for child in self.batch.children:
             if isinstance(child, Dot):
                 child.paused = True
 
     def resume_dots(self):
+        # Resume all food dots
         for child in self.batch.children:
             if isinstance(child, Dot):
                 child.paused = False
 
     def pause_game(self):
-        self.unschedule(self.update)  # 暂停主循环更新
-        self.snake.pause()  # 暂停蛇的动作
+        # Pause the game update loop and all game elements
+        self.unschedule(self.update)
+        self.snake.pause()
         for enemy in self.enemies:
-            enemy.pause()  # 暂停所有敌人的动作
-        self.pause_dots()  # 暂停所有点的动作
-
-    def resume_game(self):
-        self.schedule(self.update)  # 恢复主循环更新
-        self.snake.resume()  # 恢复蛇的动作
-        for enemy in self.enemies:
-            enemy.resume()  # 恢复所有敌人的动作
-        self.resume_dots()  # 恢复所有点的动作
-
-    def pause_scheduler(self):
-        super().pause_scheduler()
+            enemy.pause()
         self.pause_dots()
 
-    def resume_scheduler(self):
-        super().resume_scheduler()
+    def resume_game(self):
+        # Resume the game update loop and all game elements
+        self.schedule(self.update)
+        self.snake.resume()
+        for enemy in our.enemies:
+            enemy.resume()
         self.resume_dots()
 
     def update(self, dt):
+        # Update game state, called regularly by the scheduler
         if not self.parent.paused:
+            # Center the arena on the snake
             self.x = self.center[0] - self.snake.x
             self.y = self.center[1] - self.snake.y
 
     def on_key_press(self, key, modifiers):
+        # Handle key press events
         if not self.parent.paused:
             self.keys_pressed.add(key)
             self.snake.update_angle(self.keys_pressed)
 
     def on_key_release(self, key, modifiers):
+        # Handle key release events
         if not self.parent.paused:
             self.keys_pressed.discard(key)
             self.snake.update_angle(self.keys_pressed)
 
     def get_scores(self):
-        scores = [(self.snake.username, self.snake.score)]  # 使用蛇的username作为玩家名称
+        # Collect scores from all snakes
+        scores = [(self.snake.username, self.snake.score)]
         scores.extend(('Enemy {}'.format(i + 1), enemy.score) for i, enemy in enumerate(self.enemies))
         return scores
 
-    def add_food(self):
+   def add_food(self):
+        # Add a food dot to the game if below the food limit
         if self.current_food_count < self.food_limit:
-            self.batch.add(Dot(mode=self.mode))
-            self.current_food_count += 1
+            self.batch.add(Dot(mode=self.mode))  # Add a new Dot to the batch
+            self.current_food_count += 1  # Increment the food count
 
 
