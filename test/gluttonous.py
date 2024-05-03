@@ -94,7 +94,7 @@ class GameStartScene(Scene):
         if self.keys[pyglet.window.key.SPACE]:
             auth_scene = AuthScene()
             cocos.director.director.replace(auth_scene)
-            # 这是之前不经验证的版本
+           
             # homepage_scene = HomepageScene()
             # cocos.director.director.replace(homepage_scene)
             self.stop_scheduler()
@@ -108,25 +108,25 @@ class AuthScene(cocos.scene.Scene):
     def __init__(self):
         super().__init__()
 
-        # 创建背景精灵
+        # Creating background sprites
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] // 2)
-        background.opacity = 50  # 设置背景透明度为50
+        background.opacity = 50  # Set the background transparency to 50
         self.add(background, z=0)
 
-        # 创建标题标签
+        # Creating title tags
         title_label = cocos.text.Label('HELLOW!', font_name='Arial', font_size=64, anchor_x='center', anchor_y='center')
         title_label.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] * 0.8)
         self.add(title_label, z=1)
 
-        # 添加 AuthLayer
+        # add AuthLayer
         self.add(AuthLayer(), z=2)
 
-#this 2 classes is to display the login/register page
+# this 2 classes is to display the login/register page
 class AuthLayer(cocos.menu.Menu):
     def __init__(self):
         super().__init__(" ")
-
+	
         items = [
             cocos.menu.MenuItem('Login', self.login),
             cocos.menu.MenuItem('Register', self.register),
@@ -157,13 +157,13 @@ class AuthMethodLayer(cocos.layer.Layer):
     def __init__(self, type_):
         super().__init__()
         
-                # 创建背景精灵
+        # Creating background sprites
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] // 2)
-        background.opacity = 50  # 设置背景透明度为50
+        background.opacity = 50  # Set the background transparency to 50
         self.add(background, z=0)
 
-        # 创建标题标签
+        # Creating title tags
         title_label = cocos.text.Label('Authentication', font_name='Arial', font_size=64, anchor_x='center', anchor_y='center')
         title_label.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] * 0.8)
         self.add(title_label, z=1)
@@ -191,7 +191,7 @@ class AuthMethodMenu(Menu):
             menu_items = [self.username, self.password, self.register_button, self.back_button]
 
         self.create_menu(menu_items)
-
+	
     def on_username_enter(self, value):
         self.entered_username = value
 
@@ -202,7 +202,7 @@ class AuthMethodMenu(Menu):
         username = self.entered_username
         password = self.entered_password
 
-        # check whether the account input by user exist in database 
+        # check whether the account input by user exist in database (the functions we used here are defined in account.py)
         if match_user_information(username, password):
             # if it is valid,transform to Main menu
             homepage_scene = HomepageScene(username, 'regular')  # assume that the succesful login called 'regular'
@@ -219,7 +219,7 @@ class AuthMethodMenu(Menu):
         insert_account(username, password)
 
         # transforme to Main menu
-        homepage_scene = HomepageScene(username,'regular' )  # 假设注册成功的用户类型为'regular'
+        homepage_scene = HomepageScene(username,'regular' )  # Assuming that the user type registered successfully is 'regular'
         director.replace(homepage_scene)
 
     def on_back_pressed(self):
@@ -232,13 +232,13 @@ class HomepageScene(Scene):
         super(HomepageScene, self).__init__()
         self.username = username
         print(f"Received username: {self.username}")
-        # 创建背景精灵
+        # Creating background sprites
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] // 2)
-        background.opacity = 50  # 设置背景透明度为50
+        background.opacity = 50  # Set the background transparency to 50
         self.add(background, z=0)
 
-        # 创建标题标签
+        # Creating title tags
         title_label = cocos.text.Label('Homepage', font_name='Arial', font_size=64, anchor_x='center', anchor_y='center')
         title_label.position = (cocos.director.director.get_window_size()[0] // 2, cocos.director.director.get_window_size()[1] * 0.8)
         self.add(title_label, z=1)
@@ -256,7 +256,7 @@ class MainMenu(cocos.menu.Menu):
         print(f"Received username: {self.username}")
         print(f"Received user_type: {self.user_type}")
         
-        #音乐播放部分
+        #Music playback section
         if self.user_type == 'guest':
             music_file = 'VCR.mp3'
             self.music_volume = 0.5
@@ -354,7 +354,7 @@ class ClassicMode(cocos.layer.Layer):
 
         scores_background_color = define.CUSTOMIZED_PINK
         scores_background_margin = 300  # 背景边距
-        scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 120  # 增加背景高度以容纳操作指南
+        scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 120  # Increase background height to accommodate how-to guides
         scores_background_width = 550
 
         scores_background = cocos.layer.ColorLayer(*scores_background_color,
@@ -401,14 +401,14 @@ class ClassicMode(cocos.layer.Layer):
             self.add(label, 1000)
             self.sr_labels.append(label)
 
-        # 在报告中添加操作指南
+        # Adding how-to guides to reports
         self.guide_label = cocos.text.Label(
                                             'Classic Mode, Classic Snake!\n'
                                             'Using Direction Keys to Control,\n'
                                             'Press SPACE to Pause',
                                             font_name='Arial',
                                             font_size=18,
-                                            color=(255, 0, 0, 255),  # 红色字体
+                                            color=(255, 0, 0, 255),  # red font
                                             width=scores_background_width - 40,
                                             multiline=True,
                                             anchor_x='left',
@@ -493,7 +493,7 @@ class ClassicMode(cocos.layer.Layer):
     def toggle_pause(self):
         if self.paused:
             print(" # resume\n")
-            # 检查PauseMenu是否是当前层的子节点
+            # Check if PauseMenu is a child node of the current layer
             if self.pause_menu in self.get_children():
                 self.paused = False
                 self.remove(self.pause_menu)
@@ -504,7 +504,7 @@ class ClassicMode(cocos.layer.Layer):
             print("111")
             if self.pause_menu is None:
                 self.paused = True
-                self.pause_menu = PauseMenu(self.username, self.user_type)  # 确保PauseMenu是以正确的方式创建的,并传递username
+                self.pause_menu = PauseMenu(self.username, self.user_type)  # Make sure the PauseMenu is created the right way, and pass the username.
                 self.add(self.pause_menu, z=500)
                 self.arena.pause_game()
 
@@ -524,7 +524,7 @@ class ClassicMode(cocos.layer.Layer):
                     self.remove(self.pause_menu)
                     self.pause_menu = None
 
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
         else:
@@ -537,7 +537,7 @@ class ClassicMode(cocos.layer.Layer):
                 if self.pause_menu:
                     self.remove(self.pause_menu)
                     self.pause_menu = None
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
 
@@ -549,7 +549,7 @@ class ClassicMode(cocos.layer.Layer):
             self.pause_menu = None
 
         self.remove(self.arena)
-        self.arena = Arena(self, self.username,'classic')  # 传递 self 和 self.username 给 Arena 类的初始化方法
+        self.arena = Arena(self, self.username,'classic')  # Pass self and self.username to the initialization method of the Arena class.
         self.add(self.arena)
         self.gameover.visible = False
         self.update_report()
@@ -564,7 +564,7 @@ class EasyMode(cocos.layer.Layer):
         self.user_type = user_type
 
         print("Easy Mode...\n\n\n")
-        self.arena = Arena(self, username, mode='easy')  # 将username和difficulty传递给Arena
+        self.arena = Arena(self, username, mode='easy')  # Pass username and difficulty to Arena
         self.add(self.arena, 100)
 
         scores_background_color = define.CUSTOMIZED_PINK
@@ -618,7 +618,7 @@ class EasyMode(cocos.layer.Layer):
 
 
 
-        # 在报告中添加操作指南
+        # Adding how-to guides to reports
         self.guide_label = cocos.text.Label(
                                             'Easy Mode, Lower Score\n'
                                             'Lower Speed, Less Enemy & Food\n'
@@ -626,7 +626,7 @@ class EasyMode(cocos.layer.Layer):
                                             'Press SPACE to Pause',
                                             font_name='Arial',
                                             font_size=18,
-                                            color=(255, 0, 0, 255),  # 红色字体
+                                            color=(255, 0, 0, 255),  # red font
                                             width=scores_background_width - 40,
                                             multiline=True,
                                             anchor_x='left',
@@ -696,7 +696,7 @@ class EasyMode(cocos.layer.Layer):
             self.gameover.visible = False
             self.arena.unschedule(self.arena.update)
             self.remove(self.arena)
-            self.arena = Arena(self, self.username, mode='easy')  # 将username和difficulty传递给Arena
+            self.arena = Arena(self, self.username, mode='easy')  # Pass username and difficulty to Arena
             self.add(self.arena)
             self.update_report()
         else:
@@ -716,7 +716,7 @@ class EasyMode(cocos.layer.Layer):
             print("111")
             if self.pause_menu is None:
                 self.paused = True
-                self.pause_menu = PauseMenu(self.username, self.user_type)  # 确保PauseMenu是以正确的方式创建的,并传递username
+                self.pause_menu = PauseMenu(self.username, self.user_type)  # Make sure the PauseMenu is created the right way, and pass the username.
                 self.add(self.pause_menu, z=500)
                 self.arena.pause_game()
 
@@ -736,7 +736,7 @@ class EasyMode(cocos.layer.Layer):
                     self.remove(self.pause_menu)
                     self.pause_menu = None
 
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
         else:
@@ -749,7 +749,7 @@ class EasyMode(cocos.layer.Layer):
                 if self.pause_menu:
                     self.remove(self.pause_menu)
                     self.pause_menu = None
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
 
@@ -759,7 +759,7 @@ class EasyMode(cocos.layer.Layer):
             self.pause_menu = None
 
         self.remove(self.arena)
-        self.arena = Arena(self, self.username,'easy')  # 传递 self 和 self.username 给 Arena 类的初始化方法
+        self.arena = Arena(self, self.username,'easy')  # Pass self and self.username to the initialization method of the Arena class.
         self.add(self.arena)
         self.gameover.visible = False
         self.update_report()
@@ -774,11 +774,11 @@ class HardMode(cocos.layer.Layer):
         self.user_type = user_type
 
         print("Hard Mode...\n\n\n")
-        self.arena = Arena(self, username, mode='hard')  # 将username和difficulty传递给Arena
+        self.arena = Arena(self, username, mode='hard')  # Pass username and difficulty to Arena
         self.add(self.arena, 100)
 
         scores_background_color = define.CUSTOMIZED_PINK
-        scores_background_margin = 300  # 背景边距
+        scores_background_margin = 300  # background margin
         scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 160
         scores_background_width = 550
 
@@ -817,7 +817,7 @@ class HardMode(cocos.layer.Layer):
         self.add(self.scores_and_rank_label, 1000)
         
         
-        # 在报告中添加操作指南
+        # Adding how-to guides to reports
         self.guide_label = cocos.text.Label(
                                             'Hard Mode, More Score\n'
                                             'Higher Speed, More Enemy & Food\n'
@@ -913,7 +913,7 @@ class HardMode(cocos.layer.Layer):
     def toggle_pause(self):
         if self.paused:
             print(" # resume\n")
-            # 检查PauseMenu是否是当前层的子节点
+            # Check if PauseMenu is a child node of the current layer
             if self.pause_menu in self.get_children():
                 self.paused = False
                 self.remove(self.pause_menu)
@@ -924,7 +924,7 @@ class HardMode(cocos.layer.Layer):
             print("111")
             if self.pause_menu is None:
                 self.paused = True
-                self.pause_menu = PauseMenu(self.username, self.user_type)  # 确保PauseMenu是以正确的方式创建的,并传递username
+                self.pause_menu = PauseMenu(self.username, self.user_type)  # Make sure the PauseMenu is created the right way, and pass the username.
                 self.add(self.pause_menu, z=500)
                 self.arena.pause_game()
 
@@ -944,7 +944,7 @@ class HardMode(cocos.layer.Layer):
                     self.remove(self.pause_menu)
                     self.pause_menu = None
 
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
         else:
@@ -957,7 +957,7 @@ class HardMode(cocos.layer.Layer):
                 if self.pause_menu:
                     self.remove(self.pause_menu)
                     self.pause_menu = None
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
 
@@ -967,7 +967,7 @@ class HardMode(cocos.layer.Layer):
             self.pause_menu = None
 
         self.remove(self.arena)
-        self.arena = Arena(self, self.username, 'hard')  # 传递 self 和 self.username 给 Arena 类的初始化方法
+        self.arena = Arena(self, self.username, 'hard')  # Pass self and self.username to the initialization method of the Arena class.
         self.add(self.arena)
         self.gameover.visible = False
         self.update_report()
@@ -984,11 +984,11 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
 
         print("Unlimited Firepower Mode...\n\n\n")
 
-        self.arena = Arena(self, username, mode='unlimited_firepower')  # 将username传递给Arena
+        self.arena = Arena(self, username, mode='unlimited_firepower')  # Pass username to Arena
         self.add(self.arena, 100)
 
         scores_background_color = define.CUSTOMIZED_PINK
-        scores_background_margin = 300  # 背景边距
+        scores_background_margin = 300  # background margin
         scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 160
         scores_background_width = 550
 
@@ -1025,7 +1025,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
                                                       color=define.CUSTOMIZED_RED)
         self.scores_and_rank_label.position = 25, 1350
         self.add(self.scores_and_rank_label, 1000)
-        # 在报告中添加操作指南
+        # Adding how-to guides to reports
         self.guide_label = cocos.text.Label(
                                             'Unlimited Power Mode\n'
                                             'Infinity Enermy!\n'
@@ -1033,7 +1033,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
                                             'Press SPACE to Pause',
                                             font_name='Arial',
                                             font_size=18,
-                                            color=(255, 0, 0, 255),  # 红色字体
+                                            color=(255, 0, 0, 255),  # red font
                                             width=scores_background_width - 40,
                                             multiline=True,
                                             anchor_x='left',
@@ -1054,7 +1054,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
         self.player_speed = 0
         self.update_report()
 
-        # 游戏结束界面
+        # Game over screen
         self.gameover = Gameover(self.username)
         self.add(self.gameover, z=2000)
 
@@ -1111,7 +1111,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
             self.gameover.visible = False
             self.arena.unschedule(self.arena.update)
             self.remove(self.arena)
-            self.arena = Arena(self, self.username, mode='unlimited_firepower')  # 将username传递给Arena
+            self.arena = Arena(self, self.username, mode='unlimited_firepower')  # Pass username to Arena
             self.add(self.arena)
             self.update_report()
         else:
@@ -1120,7 +1120,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
     def toggle_pause(self):
         if self.pause_menu:
             print(" # resume\n")
-            # 检查PauseMenu是否是当前层的子节点
+            # Check if PauseMenu is a child node of the current layer
             if self.pause_menu in self.get_children():
                 self.paused = False
                 self.remove(self.pause_menu)
@@ -1130,7 +1130,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
             print(" # pause")
             if self.pause_menu is None:
                 self.paused = True
-                self.pause_menu = PauseMenu(self.username, self.user_type)  # 确保PauseMenu是以正确的方式创建的,并传递username
+                self.pause_menu = PauseMenu(self.username, self.user_type)  # Make sure the PauseMenu is created the right way, and pass the username.
                 self.add(self.pause_menu, z=500)
                 self.arena.pause_game()
 
@@ -1150,7 +1150,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
                     self.remove(self.pause_menu)
                     self.pause_menu = None
 
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
         else:
@@ -1163,7 +1163,7 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
                 if self.pause_menu:
                     self.remove(self.pause_menu)
                     self.pause_menu = None
-                homepage_scene = HomepageScene(self.username, self.user_type)  # 将username传递给HomepageScene
+                homepage_scene = HomepageScene(self.username, self.user_type)  # Pass username to HomepageScene
                 cocos.director.director.replace(homepage_scene)
                 return True
 
@@ -1174,14 +1174,14 @@ class UnlimitedFirepowerMode(cocos.layer.Layer):
             self.pause_menu = None
 
         self.remove(self.arena)
-        self.arena = Arena(self, self.username, mode='unlimited_firepower')  # 将username传递给Arena
+        self.arena = Arena(self, self.username, mode='unlimited_firepower')  # Pass username to Arena
         self.add(self.arena)
         self.gameover.visible = False
         self.update_report()
         self.paused = False
 
 
-class PauseMenu(Layer):  # 暂停面板部分只解决鼠标点击的问题,不解决按键的问题
+class PauseMenu(Layer):  # The pause panel section only solves the problem of mouse clicks, not keystrokes.
     is_event_handler = True
 
     def __init__(self, user_type, username):
@@ -1194,9 +1194,9 @@ class PauseMenu(Layer):  # 暂停面板部分只解决鼠标点击的问题,不�
         print("pause menu called\n")
 
         window_width, window_height = cocos.director.director.get_window_size()
-        background_width, background_height = window_width * 5 // 12, window_height * 5 // 12  # 背景层,的宽高
+        background_width, background_height = window_width * 5 // 12, window_height * 5 // 12  # The width and height of the background layer.
 
-        # 创建背景色层,并将其添加到PauseMenu Layer
+        # Create a background color layer and add it to the PauseMenu Layer.
         background_color_layer = ColorLayer(127, 127, 31, 223,
                                             width=background_width, height=background_height)
         background_color_layer.position = (define.WIDTH * 7 // 24,
@@ -1224,7 +1224,7 @@ class PauseMenu(Layer):  # 暂停面板部分只解决鼠标点击的问题,不�
         background_color_layer.add(self.menu)
 
     def on_resume(self):
-        # 此处仅允许按鼠标重开,下同
+        # This is only allowed to reopen by pressing the mouse, the same as below.
         print(' # menu resume\n')
         self.parent.paused = False
         self.parent.arena.resume_game()
@@ -1240,13 +1240,13 @@ class PauseMenu(Layer):  # 暂停面板部分只解决鼠标点击的问题,不�
         homepage_scene = HomepageScene(self.username, self.user_type)
         director.replace(homepage_scene)
 
-    # 需要额外覆写
+    # Requires additional overrides
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
             self.on_quit()
-            return True  # 阻止事件进一步传播
+            return True  # Stopping further dissemination of the incident
 
-    def on_quit(self):  # 至于结束界面的就不用操心了,直接按
+    def on_quit(self):  # Don't worry about the end of the screen, just press the ESC
         print("Returning to GameStartScene from PauseMenu by ESC...\n")
         director.pop()
 
@@ -1256,7 +1256,7 @@ class Shop(Scene):
 
         self.selected_skin = None
         self.username = username
-        self.user_type = user_type  # 将 user_type 赋值给实例变量
+        self.user_type = user_type  # Assigning user_type to an instance variable
         print(f"Received username: {self.username}")
         print(f"Received user_type: {self.user_type}")
 
@@ -1266,11 +1266,11 @@ class Shop(Scene):
 
         window_width, window_height = director.get_window_size()
 
-        # 加载背景图片并设置透明度
+        # Load background image and set transparency
         background = cocos.sprite.Sprite('background.jpg')
-        background.opacity = 50  # 设置透明度,范围是0到255,数值越小越透明
+        background.opacity = 50  # Set the transparency, the range is 0 to 255, the smaller the value the more transparent
         background.position = (window_width * 0.5, window_height * 0.5)
-        self.add(background, z=-1)  # 将背景图片添加到场景中,设置z值为-1确保它在其他元素下面
+        self.add(background, z=-1)  # Add the background image to the scene and set the z value to -1 to make sure it's below the other elements.
 
         self.title_label = Label('Shop',
                                  font_name='Times New Roman',
@@ -1279,7 +1279,7 @@ class Shop(Scene):
         self.title_label.position = (window_width * 0.5, window_height * 0.75)
         self.add(self.title_label, z=0)
 
-        # 获取用户当前选择的蛇皮肤
+        # Get the snake skin currently selected by the user
         current_skin = self.skin_manager.current_skin
         self.selected_skin_label = Label(f"Selected: {current_skin.name}",
                                          font_name='Times New Roman',
@@ -1309,7 +1309,7 @@ class Shop(Scene):
         self.skin_manager.current_skin = skin
 
         self.selected_skin_label.element.text = f"Selected: {skin.name}"
-        # 调用更新函数change_cust更新数据库中的皮肤选择
+        # Call the update function change_cust to update the skin selection in the database
         change_cust(self.username, skin_number)
 
     def on_back(self):
@@ -1325,7 +1325,7 @@ from cocos.text import Label
 import pygame
 import os
 class RankingList(Scene):
-    is_event_handler = True  # 允许层接收事件
+    is_event_handler = True  # Allow layers to receive events
 
     def __init__(self, username, user_type):
         super(RankingList, self).__init__()
@@ -1335,7 +1335,7 @@ class RankingList(Scene):
         
         window_width, window_height = director.get_window_size()
         
-        # 加入背景图片,设置透明度为50
+        # Add a background image, set the transparency to 50
         background = cocos.sprite.Sprite('background.jpg')
         background.opacity = 50
         background.position = (window_width * 0.5, window_height * 0.5)
@@ -1346,7 +1346,7 @@ class RankingList(Scene):
     def build_menu(self):
         line = 0
         
-        # 加入标题
+        # Add title
         title = cocos.text.Label('Ranking List', font_name='Times New Roman', font_size=56, anchor_x='center', anchor_y='center')
         title.position = director.window.width // 2, director.window.height // 5 * 4.5
         self.add(title, z=2)
@@ -1392,7 +1392,7 @@ class RankingList(Scene):
         homepage_scene = HomepageScene(self.username, self.user_type)
         director.replace(homepage_scene)
 class Settings(Scene):
-    is_event_handler = True  # 允许层接收事件
+    is_event_handler = True  # Allow layers to receive events
 
     def __init__(self, username, user_type):
         super(Settings, self).__init__()
@@ -1425,20 +1425,20 @@ class Settings(Scene):
         self.build_menu()
 
     def build_menu(self):
-        # 添加背景图片
+        # Add background image
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (director.window.width // 2, director.window.height // 2)
         background.opacity = 50  # 设置背景图片的透明度为 200
         self.add(background, z=0)
 
-        # 添加设置页面标题
+        # Add settings page title
         title_label = Label('Settings',
                             position=(director.window.width // 2, director.window.height * 0.8),
                             font_size=48,
                             anchor_x='center', anchor_y='center')
         self.add(title_label, z=1)
 
-        # 按键部分
+        # button section
         increase_effect_volume_item = MenuItem("+", self.on_increase_effect_volume)
         decrease_effect_volume_item = MenuItem("-", self.on_decrease_effect_volume)
         increase_music_volume_item = MenuItem("+", self.on_increase_music_volume)
@@ -1450,7 +1450,7 @@ class Settings(Scene):
                  increase_music_volume_item, decrease_music_volume_item,
                  change_mode_item, change_music_item, return_item]
 
-        # 使用相对位置安排组件
+        # Arranging Components Using Relative Positions
         positions = [(director.window.width * 0.625, director.window.height * 0.6),
                      (director.window.width * 0.575, director.window.height * 0.6),
                      (director.window.width * 0.625, director.window.height * 0.5),
@@ -1464,7 +1464,7 @@ class Settings(Scene):
                               selected_effect=zoom_in(), unselected_effect=zoom_out())
         self.add(self.menu, z=2)
 
-        # 一般显示标签部分
+        # General Display Label Section
         self.effect_volume_label = Label('Effect Volume:{:.1f}'.format(self.effect_volume),
                                          position=(director.window.width * 0.2, director.window.height * 0.6),
                                          font_size=32,
@@ -1487,7 +1487,7 @@ class Settings(Scene):
         self.add(self.control_mode_label, z=1)
         self.add(self.music_name_label, z=1)
 
-        # 音乐播放部分
+        # Music playback section
         pygame.init()
         pygame.mixer.init()
         if os.path.exists(self.music_file):
