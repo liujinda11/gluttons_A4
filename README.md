@@ -22,13 +22,17 @@ python3 gluttonous.py
 
 snake.io
 
-   This is a casual game. The main game mode is to maneuver the snake to swallow the fruit to get points, grow the body, 
-   avoid the head to touch the enemy and the border at the same time, the player needs to do their best to destroy all the enemies with the snake's body.
+   Welcome to the Gluttonous Snake Game, a fun and engaging game where you control a snake to eat fruit, grow longer, and avoid enemies. This README provides all the necessary details to get you started, including installation instructions, game modes, controls, and more.
+
+Game Controls
+
+   Change Direction: Use Arrow Keys or WASD
 
 （1）login/register page
 
-Users can create accounts and log in with existing accounts. The game stores all records of the user's previous play in a database and the player can continue their game! 
-As well, the user has the option to experience our base game (only “Classic Mode”, no other features) with a “Guest Login”.
+   ·Login/Register: Create a new account or log in to access saved game data.
+   
+   ·Guest Login: Try the Classic Mode without creating an account.
 
 （2）Games Home
 
@@ -36,25 +40,28 @@ As well, the user has the option to experience our base game (only “Classic Mo
    
    We have several game modes. In addition to the classic game modes, there is also an infinite mode,
    
-   Classic Mode: There are three difficulties with different movement speeds, score ratios, and number of enemies, allowing users to debug according to their needs.
+   · Classic Mode:
+      Difficulty Levels: Easy, Medium, Hard
+      Features: Adjust movement speeds, score ratios, and number of enemies.
    
-   Infinite Mode: Players need to survive as long as possible! Enemies will spawn indefinitely, try to get the highest score in a non-stop game!
-
+   · Infinite Mode:
+      Description: Survive as long as possible with continuous enemy spawns. Aim for the highest score!
+   
 2. shop：
 
-   Players can change the skin for their game characters on this page to have a more diversified gaming experience!
+   Customize your snake with various skins available for purchase in the game shop to enhance your gaming experience.
 
 3. rank：
 
-   Users can check out the top ranked players here. Work hard to become a master of Gluttony!  
+   Check out the leaderboard to see top scores and compete with other players.
 
 4. setting：
 
-   Players can adjust their settings here, including sound level and background music. The database will save the settings before the user logs out.
+   Customize game settings such as sound level and background music. Settings are saved automatically.
 
-*pause
+5. pause menu
 
-   The user can pause the game at any time during the game. The current score can be viewed during pause, and the option to restart the game/exit the game is also available.
+   Pause the game at any time to view current scores or to restart/exit the game.
 
 
 Regardless of the original or new version, this is how you can run it on Ubuntu: In a command prompt.
