@@ -28,6 +28,7 @@ class SkinManager:
         self.username = username
         self.current_skin = self.get_current_skin(self.username)
 
+#the function to get the current skin for the snake
     def get_current_skin(self, username):
         cust_number = self.get_current_cust_number(username)
         return self.skins[cust_number]
@@ -84,7 +85,7 @@ class Snake(cocos.cocosnode.CocosNode):
         self.head = Sprite('circle.png', color=self.color)
         self.scale = 0.375  # 64像素的超分图是0.75，16像素时是1.5
 
-        # 左眼
+        #left eye
         eye = Sprite('circle.png')
         eye.x = 15  # 原先0
         eye.y = 15  # 原先5
@@ -94,7 +95,7 @@ class Snake(cocos.cocosnode.CocosNode):
         eye.add(eyeball)
         self.head.add(eye)
 
-        # 右眼
+        #right eye
         eye = Sprite('circle.png')
         eye.x = 15
         eye.y = -15
@@ -131,7 +132,7 @@ class Snake(cocos.cocosnode.CocosNode):
 # ... (其他代码保持不变)
 
     def init_enemy_position(self):
-        safe_distance = 300  # 安全距离
+        safe_distance = 300  # safe distance
         max_attempts = 100  # 最大尝试次数以避免无限循环
         for _ in range(max_attempts):
             potential_position = random.randrange(100, define.WIDTH - 100), \
