@@ -2,13 +2,13 @@
 
 
 
-**snake.io: Gluttonous Snake Game**
+**snake.io: Gluttonous**
 
-   Welcome to the Gluttonous Snake Game! Dive into a world where you control a snake to eat fruit, grow longer, dodge and try to physically block to eliminate enemies. This README file provides all the details you need to start playing, including installation instructions, control method, game modes, and more.
+   Welcome to the Gluttonous! Dive into a world where you control a snake to eat fruit, grow longer, dodge and try to block to eliminate enemies by your body. This README file provides all the details you need to start playing, including control method, game process, installation instructions, and other information.
 
 **Control Method**
 
-   ·Change Direction: Use the Arrow Keys or WASD.
+   ·Change Direction: Use the Arrow Keys.
    
    ·Pause/Resume: Press SPACE or use the mouse to select the appropriate option on the pause panel to pause or resume the game.
    
@@ -18,15 +18,14 @@
    
    ·Return to previous page: Press BACKSPACE or use the mouse to select the appropriate option to return to previous page from current page.
 
-**Login/Register Page**
-
-   ·Login/Register: Create a new account or log in to access saved game data.
+   ·Login/Register: Create a new account or log in to access saved game data in the login/register page.
    
-   ·Guest Login: Try Classic Mode without creating an account.
+   ·Guest Login: Try Classic Mode without creating an account in the login/register page.
 
 **Game Process**
 
    **Main Menu**
+   
    **1. Select Game Mode**
    
    We have several game modes. In addition to the Classic modes, there is also an infinite mode (Unlimited Firepower Mode),
@@ -51,6 +50,7 @@
    Adjust game settings like sound level and background music. Settings are saved automatically.
 
    **Arena**
+   
    **Pause Menu**
 
    Pause the game in the arena at any time to restart/exit the game.
