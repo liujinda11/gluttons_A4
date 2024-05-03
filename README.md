@@ -3,19 +3,21 @@
 
 
 
-snake.io
+snake.io:Gluttonous Snake Game
 
-   Welcome to the Gluttonous Snake Game, a fun and engaging game where you control a snake to eat fruit, grow longer, and avoid enemies. This README provides all the necessary details to get you started, including installation instructions, game modes, controls, and more.
+   Welcome to the Gluttonous Snake Game! Dive into a world where you control a snake to eat fruit, grow longer, and dodge enemies. This README provides all the details you need to start playing, including installation instructions, game modes, controls, and more.
 
 Game Controls
 
-   ·Change Direction: Use Arrow Keys or WASD
+   ·Change Direction: Use the Arrow Keys or WASD.
    
-   ·SPACE: Toggle pause and resume the game.
+   ·Pause/Resume: Press SPACE to toggle pause and resume.
    
-   ·J: Restart the game from any state.
+   ·Restart: Press 'J' to restart the game from any state.
    
-   BACKSPACE: Return to the homepage scene from the game or pause menu.
+   ·Home: Press BACKSPACE to return to the homepage from the game or pause menu.
+   
+   ·BACKSPACE: Return to the homepage scene from the game or pause menu.
 
 （1）login/register page
 
@@ -31,32 +33,39 @@ Game Controls
    
    · Classic Mode:
       Difficulty Levels: Easy, Medium, Hard
-      Features: Adjust movement speeds, score ratios, and number of enemies.
+      Features: Adjustable movement speeds, score ratios, and enemy counts.
    
    · Infinite Mode:
-      Description: Survive as long as possible with continuous enemy spawns. Aim for the highest score!
+      Description: Continuously evade enemies and aim for the highest score in an endless survival challenge.
    
-2. shop：
+2. Shop：
 
    Customize your snake with various skins available for purchase in the game shop to enhance your gaming experience.
 
-3. rank：
+3. Rankings：
 
    Check out the leaderboard to see top scores and compete with other players.
 
-4. setting：
+4. Settings：
 
-   Customize game settings such as sound level and background music. Settings are saved automatically.
+   Adjust game settings like sound level and background music. Settings are saved automatically.
 
-5. pause menu
+5. Pause Menu
 
    Pause the game at any time to view current scores or to restart/exit the game.
 
 
-Regardless of the original or new version, this is how you can run it on Ubuntu: In a command prompt.
+Installation (Ubuntu):
 
-   1. Install python: sudo apt update sudo apt install python3
-   2. Install various packages:
+   To run the game on Ubuntu, follow these steps in a command prompt:
+
+   1. Install Python:
+
+      sudo apt update sudo
+
+      apt install python3
+      
+   2. Install Required Packages:
 
       pip install pygame
 
@@ -68,7 +77,10 @@ Regardless of the original or new version, this is how you can run it on Ubuntu:
 
       Here's how to import a stable version of the game: pip install pyglet==1.5.21 cocos2d==0.6.9
    
-   3. Interpret the python file: python3 gluttonous.py
+   3. Run the Game:
+
+      python3 gluttonous.py
+   
    Then use keyboard and mouse to operate the game.
 
 Note: 
