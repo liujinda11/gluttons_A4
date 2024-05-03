@@ -18,32 +18,50 @@ class SnakeSkin:
 
 class SkinManager:
     def __init__(self, username):
+        # Initialize a list of possible snake skins with their names and colors
         self.skins = [
             SnakeSkin('LitterBrotherSnake', (0, 0, 0)),
             SnakeSkin('FireSnake', (255, 0, 0)), 
             SnakeSkin('IceSnake', (0, 0, 255)),
             SnakeSkin('MagicSnake', random.choice(define.ALL_COLOR))
         ]
-	
+        
+        # Store the username of the snake's player
         self.username = username
+        # Set the current skin based on the username
         self.current_skin = self.get_current_skin(self.username)
 
-#the function to get the current skin for the snake
     def get_current_skin(self, username):
+        """
+        Determine the current skin for the snake based on the user's saved preferences.
+        """
+        # Retrieve the custom number (index for skin) for the given username
         cust_number = self.get_current_cust_number(username)
+        # Return the skin object corresponding to the custom number
         return self.skins[cust_number]
 
     def get_current_cust_number(self, username):
+        """
+        Fetch the current customization number (index) from the user's saved state.
+        """
+        # Obtain the current state, which includes the custom skin number
         state = current_state(username)
         print(f"Current state: {state}")
+        
+        # Default to the first skin if the state is None, not a list/tuple, or too short
         if state is None or not isinstance(state, (list, tuple)) or len(state) < 10:
-            return 0  # 如果状态为None或长度不足10,则默认为0
+            return 0  # If state is None or not long enough, default to 0
+            
+        # Extract the custom number from the state
         cust_number = state[9]
         print(f"Current cust_number: {cust_number}")
+        
+        # Default to the first skin if no custom number is found
         if cust_number is None:
-            cust_number = 0  # 如果没有自定义皮肤,则默认为0
-            change_cust(self.username, 0)  # 如果没有自定义皮肤,则默认为0
-        return int(cust_number)
+            cust_number = 0  # Default to 0 if no custom skin
+            change_cust(self.username, 0)  # Update the state if no custom skin is defined
+            
+        return int(cust_number)  # Return the custom number as an integer
 
 
 class Snake(cocos.cocosnode.CocosNode):
@@ -52,9 +70,12 @@ class Snake(cocos.cocosnode.CocosNode):
     def __init__(self, username, is_enemy=False, mode='classic'):
         super(Snake, self).__init__()
 
+        # Game mode can affect certain properties of the snake
         self.mode = mode
+        # Speed multiplier adjusts based on the game mode
         self.speed_multiplier = 1.2 if self.mode == 'unlimited_firepower' else 1
 
+        # Initialize basic snake properties
         self.score = None
         self.length = None
         self.body = None
@@ -62,51 +83,56 @@ class Snake(cocos.cocosnode.CocosNode):
         self.updated_speed = 0
         self.is_dead = False
         self.paused = False
-        self.angle = random.randrange(360)  # 目前角度
-        self.angle_dest = self.angle  # 目标角度
+        self.angle = random.randrange(360)  # Current angle of the snake
+        self.angle_dest = self.angle  # Target angle the snake is turning towards
         self.username = username
 
+        # If the snake is not an enemy, set up its skin and color
         if not is_enemy:
             self.skin_manager = SkinManager(self.username)
             self.color = self.skin_manager.current_skin.color
         else:
+            # Randomly assign a color if it's an enemy snake
             self.color = random.choice(define.ALL_COLOR)
 
+        # Increment the count of snakes
         Snake.no += 1
 
-        if is_enemy:
-            pass
-        else:
+        # Set the initial position of the snake if it is not an enemy
+        if not is_enemy:
             self.position = random.randrange(define.WIDTH // 2 - 100, define.WIDTH // 2 + 100), \
                 random.randrange(define.HEIGHT // 2 - 50, define.HEIGHT // 2 + 50)
 
         self.is_enemy = is_enemy
 
+        # Create the snake's head sprite with the assigned color
         self.head = Sprite('circle.png', color=self.color)
-        self.scale = 0.375  # 64像素的超分图是0.75，16像素时是1.5
+        self.scale = 0.375  # Adjust scale based on pixel size (higher scale for lower resolution)
 
-        #left eye
+        # Create the left eye
         eye = Sprite('circle.png')
-        eye.x = 15  # 原先0
-        eye.y = 15  # 原先5
-        eye.scale = 0.375  # 16像素时是0.5
+        eye.x = 15  # Offset for the eye from center
+        eye.y = 15
+        eye.scale = 0.375
         eyeball = Sprite('circle.png', color=define.BLACK)
-        eyeball.scale = 0.375  # 16像素时是0.5
+        eyeball.scale = 0.375
         eye.add(eyeball)
         self.head.add(eye)
 
-        #right eye
+        # Create the right eye
         eye = Sprite('circle.png')
         eye.x = 15
         eye.y = -15
-        eye.scale = 0.375  # 16像素时是0.5
+        eye.scale = 0.375
         eyeball = Sprite('circle.png', color=define.BLACK)
-        eyeball.scale = 0.375  # 16像素时是0.5
+        eyeball.scale = 0.375
         eye.add(eyeball)
         self.head.add(eye)
 
+        # Add head to the snake's sprite group
         self.add(self.head)
 
+        # Set initial speed based on the game mode
         if self.mode == 'easy':
             self.init_speed = 100
         elif self.mode == 'classic':
@@ -114,16 +140,20 @@ class Snake(cocos.cocosnode.CocosNode):
         elif self.mode == 'hard':
             self.init_speed = 250
         elif self.mode == 'unlimited_firepower':
-            self.init_speed = 150        
+            self.init_speed = 150
         if not is_enemy:
-            self.init_speed += 30
+            self.init_speed += 30  # Increase speed for player-controlled snakes
 
+        # Calculate the updated speed based on the multiplier
         self.updated_speed = self.init_speed * self.speed_multiplier
         self.speed = self.updated_speed
 
+        # Initialize the path where the snake has been
         self.path = [self.position] * 100
 
+        # Schedule regular updates for the snake's movement
         self.schedule(self.update)
+        # If an enemy, schedule AI behavior updates at random intervals
         if self.is_enemy:
             self.schedule_interval(self.ai, random.random() * 0.1 + 0.05)
 
@@ -324,7 +354,7 @@ class Snake(cocos.cocosnode.CocosNode):
         if self.is_dead:
             return
 
-        # 根据模式调整得分
+        # adjust the score increasing ratio according to the difficulty/mode
         if self.mode == 'easy':
             self.score += s * 1
         elif self.mode == 'classic':
@@ -388,70 +418,97 @@ class Snake(cocos.cocosnode.CocosNode):
             if abs(angle - self.angle_dest) < 5:
                 self.angle_dest += random.randrange(90, 270)
 
-    def check_crash(self, other):
-        if self.is_dead or other.is_dead:
-            return
-        if (self.x < 0 or self.x > define.WIDTH) or (
-                self.y < 0 or self.y > define.HEIGHT
-        ):
-            self.crash(None)
-            return
-        """
-        collision_distance = 24 + len(self.body) * 0.5  # 假设每增加一个身体部分，碰撞距离增加0.5
-        for b in other.body:
-            dis = math.sqrt((b.x - self.x) ** 2 + (b.y - self.y) ** 2)
-            if dis < collision_distance:
-                self.crash()
-                return
-        """
-        for b in other.body:
-            # 超清后的蛇头和蛇身部分的图片尺寸基准是64像素
-            # 原图16像素
-            base_size = 16
-            # 计算蛇头和蛇身部分的实际半径
-            head_radius = (self.head.scale * base_size) / 2
-            body_radius = (b.scale * base_size) / 2
-            # 碰撞距离为蛇头半径与这节蛇身半径之和
-            collision_distance = head_radius + body_radius
+    
+	def check_crash(self, other):
+	    # If either snake is already marked as dead, exit the function to avoid further processing
+	    if self.is_dead or other.is_dead:
+	        return
+	
+	    # Check if the snake's head has moved out of the defined game boundaries
+	    if (self.x < 0 or self.x > define.WIDTH) or (
+	            self.y < 0 or self.y > define.HEIGHT):
+	        self.crash(None)  # Initiate crash logic if the snake hits the boundary
+	        return
+	
+	    # Commented out: Previous version of the collision detection logic
+	    """
+	    collision_distance = 24 + len(self.body) * 0.5  # Assuming each additional body part increases collision distance by 0.5
+	    for b in other.body:
+	        dis = math.sqrt((b.x - self.x) ** 2 + (b.y - self.y) ** 2)
+	        if dis < collision_distance:
+	            self.crash()
+	            return
+	    """
+	
+	    # Loop through each body part of the other snake
+	    for b in other.body:
+	        # Base size of the snake parts' images is 16 pixels in the original design
+	        base_size = 16
+	        # Calculate the actual radii of the snake's head and the body part it might collide with
+	        head_radius = (self.head.scale * base_size) / 2
+	        body_radius = (b.scale * base_size) / 2
+	        # Collision distance is the sum of the radii of the snake head and the body part
+	        collision_distance = head_radius + body_radius
+	
+	        # Calculate the distance between the snake's head and the body part of the other snake
+	        dis = math.sqrt((b.x - self.x) ** 2 + (b.y - self.y) ** 2)
+	        if dis < collision_distance:
+	            self.crash(other)  # Initiate crash logic if a collision is detected
+	            return
 
-            dis = math.sqrt((b.x - self.x) ** 2 + (b.y - self.y) ** 2)
-            if dis < collision_distance:
-                self.crash(other)
-                return
-
-    def crash(self, other):
-        if not self.is_dead:
-            self.is_dead = True
-            self.unschedule(self.update)
-            self.unschedule(self.ai)
-            arena = self.parent
-            for b in self.body:
-                arena.batch.add(Dot(b.position, b.color))
-                arena.batch.add(Dot(b.position, b.color))
-                arena.batch.remove(b)
-            print("1")
-            arena.remove(self)
-            if self.mode == 'unlimited_firepower':
-                arena.add_enemy()  # 如果模式是'unlimited_firepower',则添加新的敌人蛇
-            del self.path
-            print("2")
-            print(f"self.is_enemy: {self.is_enemy}")  # 输出self.is_enemy的值
-            if self.is_enemy:
-                arena.enemies.remove(self)
-                print("3")
-
-                self.parent.kills += 1
-                print("   ###   You has slain an enemy!!!")
-                if self.mode != 'unlimited_firepower' and self.parent.kills == 20:
-                    # 如果不是'unlimited_firepower'模式,并且杀掉的蛇的数量等于PLAYERS_NUM,则结束游戏
-                    
-                    print("4")
-                                        
-                    arena.parent.end_game()
-                del self.body
-                del self
-            else:
-                arena.parent.end_game()
+    
+	def crash(self, other):
+	    # Check if the snake is already dead to avoid processing the death multiple times
+	    if not self.is_dead:
+	        self.is_dead = True  # Mark the snake as dead
+	
+	        # Unschedule the update and AI methods to stop the snake's movement and AI behavior
+	        self.unschedule(self.update)
+	        self.unschedule(self.ai)
+	
+	        arena = self.parent  # Get the arena where the snake is located
+	
+	        # Convert the snake's body parts into dots that remain in the arena after death
+	        for b in self.body:
+	            arena.batch.add(Dot(b.position, b.color))
+	            arena.batch.add(Dot(b.position, b.color))
+	            arena.batch.remove(b)  # Remove the actual body part from the rendering batch
+	
+	        print("1")  # Debugging print statement
+	
+	        # Remove the snake from the arena
+	        arena.remove(self)
+	
+	        # If the game mode is 'unlimited_firepower', add a new enemy snake
+	        if self.mode == 'unlimited_firepower':
+	            arena.add_enemy()
+	
+	        # Clear the path array to free up memory and other resources
+	        del self.path
+	
+	        print("2")  # Debugging print statement
+	        print(f"self.is_enemy: {self.is_enemy}")  # Output whether the snake is an enemy
+	
+	        # Specific handling if the snake is an enemy
+	        if self.is_enemy:
+	            arena.enemies.remove(self)  # Remove the snake from the list of enemies
+	            print("3")  # Debugging print statement
+	
+	            self.parent.kills += 1  # Increment the kill count of the player
+	            print("   ###   You has slain an enemy!!!")  # Celebration message
+	
+	            # If the game mode is not 'unlimited_firepower' and the player has killed enough enemies:
+	            if self.mode != 'unlimited_firepower' and self.parent.kills == 20:
+	                print("4")  # Debugging print statement
+	                arena.parent.end_game()  # End the game if conditions are met
+	
+	            # Clean up the body list and delete the snake object to free up resources
+	            del self.body
+	            del self
+	
+	        else:
+	            # If the snake is not an enemy (i.e., the player's snake), end the game
+	            arena.parent.end_game()
 
 
 
