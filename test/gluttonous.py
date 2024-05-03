@@ -1595,7 +1595,7 @@ class Settings(Scene):
 
 # Main execution point, initialize the director and start the game
 if __name__ == "__main__":
-    cocos.director.director.init(width=2560, height=1600, caption="原神.exe", fullscreen=True)  # if you wanna chage the size of the window , adjust the width and height here as you like!
+    cocos.director.director.init(width=2560, height=1600, caption="GluttonousGame.exe", fullscreen=True)  # if you wanna chage the size of the window , adjust the width and height here as you like!
     cocos.director.director.run(GameStartScene())
 
 # width=screen_width, height=screen_height
