@@ -50,7 +50,7 @@ Game Controls
 Regardless of the original or new version, this is how you can run it on Ubuntu: In a command prompt.
 
    1. Install python: sudo apt update sudo apt install python3
-   2. Install various packages: pip install pygame pip install cocos (actually cocos2d) pip install pyglet Here's how to import a stable version of the game: pip install pyglet==1.5.21 cocos2d==0.6.9
+   2. Install various packages: pip install pygame pip install cocos (actually cocos2d) pip install pyglet pip install mysql-connector-python Here's how to import a stable version of the game: pip install pyglet==1.5.21 cocos2d==0.6.9
    3. Interpret the python file: python3 gluttonous.py
    Then use keyboard and mouse to operate the game.
 
