@@ -377,6 +377,7 @@ class MainMenu(cocos.menu.Menu):
         print("Returning to GameStartScene from MainMenu by ESC...\n.")
         init = GameStartScene()
         cocos.director.director.replace(init)
+	    
 class ClassicMode(cocos.layer.Layer):
     is_event_handler = True
 
@@ -464,13 +465,7 @@ class ClassicMode(cocos.layer.Layer):
         self.paused = False
 
         self.keyboard = key.KeyStateHandler()
-        director.window.push_handlers(self.keyboard)
-
-    # ... 其他方法保持不变 ...
-
-    # ... 其他方法保持不变 ...
-
-    
+        director.window.push_handlers(self.keyboard)    
 
     def update_report(self):
         self.player_kills = self.arena.kills
@@ -605,7 +600,7 @@ class EasyMode(cocos.layer.Layer):
         self.add(self.arena, 100)
 
         scores_background_color = define.CUSTOMIZED_PINK
-        scores_background_margin = 300  # 背景边距
+        scores_background_margin = 300  # background margin
         scores_background_height = define.PLAYERS_NUM * 28 + 2 * scores_background_margin + 160
         scores_background_width = 550
 
@@ -941,7 +936,7 @@ class HardMode(cocos.layer.Layer):
             self.gameover.visible = False
             self.arena.unschedule(self.arena.update)
             self.remove(self.arena)
-            self.arena = Arena(self, self.username, mode='hard')  # 将username和difficulty传递给Arena
+            self.arena = Arena(self, self.username, mode='hard')  # Pass username and difficulty to Arena
             self.add(self.arena)
             self.update_report()
         else:
