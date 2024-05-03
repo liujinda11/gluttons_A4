@@ -157,17 +157,14 @@ class Snake(cocos.cocosnode.CocosNode):
         if self.is_enemy:
             self.schedule_interval(self.ai, random.random() * 0.1 + 0.05)
 
-    # ... (其他方法保持不变)
-
-# ... (其他代码保持不变)
 
     def init_enemy_position(self):
         safe_distance = 300  # safe distance
-        max_attempts = 100  # 最大尝试次数以避免无限循环
+        max_attempts = 100  # Maximum number of attempts to avoid infinite loops
         for _ in range(max_attempts):
             potential_position = random.randrange(100, define.WIDTH - 100), \
                 random.randrange(100, define.HEIGHT - 100)
-            # print("potential position: ", potential_position[0], potential_position[1])  # 添加的打印语句
+            # print("potential position: ", potential_position[0], potential_position[1])  # Added print statement
             player_head_pos = self.parent.snake.position
             player_body_positions = [b.position for b in self.parent.snake.body]
 
@@ -187,15 +184,15 @@ class Snake(cocos.cocosnode.CocosNode):
             if distance_to_head >= safe_distance and not too_close_to_body:
                 self.position = potential_position
                 # print("safely generate an enemy, ^^^ as position\n")
-                break  # 找到了一个安全的位置
+                break  # found a safe location
 
     def add_body(self):
-        # 创建一个新的身体部分
+        # Create a new body part
         new_body_part = Sprite('circle.png', color=self.color)
-        new_body_part.position = self.position  # 将新身体部分放置在蛇头的当前位置
+        new_body_part.position = self.position  # Place the new body part at the current location of the snake's head
 
-        # 将新身体部分添加到绘制列表中
-        # 使用一个计算得来的z-index确保蛇身部分按正确顺序绘制
+        # Add new body part to draw list
+        # Use a calculated z-index to ensure that the snake body parts are drawn in the correct order
         if self.x == 0:
             print(self.position)
         new_body_part.position = self.position
@@ -205,7 +202,7 @@ class Snake(cocos.cocosnode.CocosNode):
         except:
             print(999 + 100 * self.no - len(self.body))
 
-        # 更新蛇的身体列表，加入新的身体部分
+        # Updated snake body list to include new body parts
         # """
         if not self.is_enemy:
             # print(new_body_part.scale)
@@ -213,8 +210,8 @@ class Snake(cocos.cocosnode.CocosNode):
             pass
         # """
         self.body.append(new_body_part)
-        # 更新头部大小
-        self.head.scale += 0.0075  # 假设头部大小每增加一个身体部分，增加0.0125的比例 <-16像素
+        # Update header size
+        self.head.scale += 0.0075  # Assume that head size increases by a ratio of 0.0125 for each body part <-16 pixels
 
     def init_body(self):
         self.score = 30
@@ -255,30 +252,30 @@ class Snake(cocos.cocosnode.CocosNode):
         self.y += math.sin(self.angle * math.pi / 180) * dt * self.speed
         self.path.append(self.position)
 
-        # 更新身体位置
-        base_lag = 6  # 基础间隔
-        increment_per_length = 0.0001  # 每增加一个身体长度单位，间隔增加的量
-        smooth_factor = 0.1  # 平滑因子，用于平滑间隔的增长
+        # Update body position
+        base_lag = 6  # base interval
+        increment_per_length = 0.0001  # The amount by which the interval increases for each additional unit of body length
+        smooth_factor = 0.1  # Smoothing factor, used to smooth the growth of intervals
 
-        # 计算当前的总间隔增量，使用平滑因子减少突变
+        # Calculate the current total interval increment, using smoothing factors to reduce mutations
         total_increment = increment_per_length * len(self.body) * smooth_factor
 
-        # 根据蛇的长度动态调整路径记录的密度
-        path_record_frequency = int(1 + len(self.body) / 10)  # 假设蛇身体每增加5个单位，路径记录的频率增加
+        # Dynamically adjust the density of path records based on the length of the snake
+        path_record_frequency = int(1 + len(self.body) / 10)  # Assume that every time the snake body increases by 5 units, the frequency of path recording increases
         if len(self.path) % path_record_frequency == 0:
             self.path.append(self.position)
 
         for i, b in enumerate(self.body):
-            # 使用平滑后的总间隔增量计算每个身体部分的实际间隔
+            # Calculate the actual separation of each body part using the smoothed total separation delta
             lag = base_lag + total_increment * (i / len(self.body))
             idx = (i + 1) * int(lag)
             if len(self.path) > idx:
                 b.position = self.path[-idx]
 
-            new_scale = 0.375 + (self.score - 30) * 0.0005  # 假设每增加一分，scale增加0.0015
+            new_scale = 0.375 + (self.score - 30) * 0.0005  # Assume that for every additional point, scale increases by 0.0015
             b.scale = new_scale
 
-        # 确保路径长度适应身体长度的增加
+        # Make sure the path length accommodates the increase in body length
         required_path_length = (len(self.body) + 1) * (base_lag + total_increment)
         if len(self.path) > required_path_length:
             self.path = self.path[-int(required_path_length):]
@@ -555,10 +552,10 @@ class Snake(cocos.cocosnode.CocosNode):
             print("1")
             arena.remove(self)
             if self.mode == 'unlimited_firepower':
-                arena.add_enemy()  # 如果模式是'unlimited_firepower',则添加新的敌人蛇
+                arena.add_enemy()  # If mode is 'unlimited_firepower', add new enemy snake
             del self.path
             print("2")
-            print(f"self.is_enemy: {self.is_enemy}")  # 输出self.is_enemy的值
+            print(f"self.is_enemy: {self.is_enemy}")  # Output the value of self.is_enemy
             if self.is_enemy:
                 arena.enemies.remove(self)
                 print("3")
@@ -566,7 +563,7 @@ class Snake(cocos.cocosnode.CocosNode):
                 self.parent.kills += 1
                 print("   ###   You has slain an enemy!!!")
                 if self.mode != 'unlimited_firepower' and self.parent.kills == 20:
-                    # 如果不是'unlimited_firepower'模式,并且杀掉的蛇的数量等于PLAYERS_NUM,则结束游戏
+                    # If it is not 'unlimited_firepower' mode and the number of snakes killed is equal to PLAYERS_NUM, the game will end
                     
                     print("4")
                                         
@@ -589,20 +586,20 @@ class Snake(cocos.cocosnode.CocosNode):
             print("1")
             arena.remove(self)
             if self.mode == 'unlimited_firepower':
-                arena.add_enemy()  # 如果模式是'unlimited_firepower',则添加新的敌人蛇
+                arena.add_enemy()  # If mode is 'unlimited_firepower', add new enemy snake
             del self.path
             print("2")
-            print(f"self.is_enemy: {self.is_enemy}")  # 输出self.is_enemy的值
+            print(f"self.is_enemy: {self.is_enemy}")  # Output the value of self.is_enemy
             if self.is_enemy:
                 arena.enemies.remove(self)
                 print("3")
                 if not other == None:
-                    print(f"other.is_enemy: {other.is_enemy}")  # 输出other.is_enemy的值
+                    print(f"other.is_enemy: {other.is_enemy}")  # Output the value of other.is_enemy
                 if not other == None and other.is_enemy:
                     self.parent.kills += 1
                     print("   ###   You has slain an enemy!!!")
                     if self.mode != 'unlimited_firepower' and self.parent.kills == PLAYERS_NUM:
-                    # 如果不是'unlimited_firepower'模式,并且杀掉的蛇的数量等于PLAYERS_NUM,则结束游戏
+                    # If it is not 'unlimited_firepower' mode and the number of snakes killed is equal to PLAYERS_NUM, the game will end
                         del self.body
                         print("4")
                         del self                    
@@ -628,7 +625,7 @@ class Snake(cocos.cocosnode.CocosNode):
             print("1")
             arena.remove(self)
             if self.mode == 'unlimited_firepower':
-                arena.add_enemy()  # 如果模式是'unlimited_firepower',则添加新的敌人蛇
+                arena.add_enemy()  # If mode is 'unlimited_firepower', add new enemy snake
             del self.path
             print("2")
             if self.is_enemy:
@@ -639,7 +636,7 @@ class Snake(cocos.cocosnode.CocosNode):
 
                     print("   ###   You has slain an enemy!!!")
                     if self.mode != 'unlimited_firepower' and self.parent.kills == 1:
-                        # 如果不是'unlimited_firepower'模式,并且杀掉的蛇的数量等于PLAYERS_NUM,则结束游戏
+                        # If it is not 'unlimited_firepower' mode and the number of snakes killed is equal to PLAYERS_NUM, the game will end
                         del self.body
                         print("1")
                         del self                    
