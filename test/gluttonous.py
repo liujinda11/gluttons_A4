@@ -8,10 +8,8 @@ from cocos.actions import CallFunc
 import pyglet
 from pyglet.window import key
 from pyglet.text import Label
-# from sys import platform
 import os
 import pygame
-
 import define
 from arena import Arena
 from gameover import Gameover
@@ -1356,13 +1354,6 @@ class Shop(Scene):
         director.replace(homepage_scene)
 
 
-import cocos
-from cocos.director import director
-from cocos.menu import Menu, MenuItem, zoom_in, zoom_out
-from cocos.scene import Scene
-from cocos.text import Label
-import pygame
-import os
 class RankingList(Scene):
     is_event_handler = True  # Allow layers to receive events
 
@@ -1370,7 +1361,7 @@ class RankingList(Scene):
         super(RankingList, self).__init__()
         self.username = username
         self.user_type = user_type
-        self.ranking_items = get_ranking()
+        self.ranking_items = get_ranking()# Retrieve ranking data
         
         window_width, window_height = director.get_window_size()
         
@@ -1380,7 +1371,7 @@ class RankingList(Scene):
         background.position = (window_width * 0.5, window_height * 0.5)
         self.add(background, z=0)
         
-        self.build_menu()
+        self.build_menu()# Build the menu interface
 
     def build_menu(self):
         line = 0
@@ -1389,7 +1380,8 @@ class RankingList(Scene):
         title = cocos.text.Label('Ranking List', font_name='Times New Roman', font_size=56, anchor_x='center', anchor_y='center')
         title.position = director.window.width // 2, director.window.height // 5 * 4.5
         self.add(title, z=2)
-        
+
+	# Initialize column titles for username, highest score, and ranking
         self.title1 = Label('username', position=(director.window.width // 5, director.window.height // 5 * 4),
                             font_size=32, anchor_x='center', anchor_y='center')
         self.title2 = Label('highest score', position=(director.window.width // 5 * 2, director.window.height // 5 * 4),
@@ -1400,11 +1392,14 @@ class RankingList(Scene):
         self.add(self.title2, z=2)
         self.add(self.title3, z=2)
 
+	 # Add individual ranking items
         for rank in self.ranking_items:
             line += 1
             username, highest_score, ranking = rank
 
-            username_label = Label(username, position=(
+	
+            # Display username, score, and rank with dynamic positioning based on line number
+	    username_label = Label(username, position=(
             director.window.width // 5, director.window.height // 5 * 4 - line * director.window.height // 10),
                                    font_size=32, anchor_x='center', anchor_y='center')
 
@@ -1430,6 +1425,7 @@ class RankingList(Scene):
     def on_return(self):
         homepage_scene = HomepageScene(self.username, self.user_type)
         director.replace(homepage_scene)
+	    
 class Settings(Scene):
     is_event_handler = True  # Allow layers to receive events
 
@@ -1438,8 +1434,10 @@ class Settings(Scene):
 
         self.username = username
         self.user_type = user_type
-        state = current_state(self.username)
-        if state is not None and len(state) >= 13:
+        state = current_state(self.username)# Get the current state settings for the user
+
+	# Set initial settings based on saved state or defaults    
+	if state is not None and len(state) >= 13:
             self.music_volume = state[4]
             self.effect_volume = state[11]
             if state[3] == 0:
@@ -1451,23 +1449,23 @@ class Settings(Scene):
             else:
                 self.control_mode = 'Mouse'
         else:
+	    # Default settings if no state is saved
             self.music_volume = 0.5
-            change_volume(self.username, self.music_volume)
+            change_volume(self.username, self.music_volume)# Set default music volume
             self.effect_volume = 0.5
-            change_evolume(self.username, self.effect_volume)
+            change_evolume(self.username, self.effect_volume)# Set default effect volume
             self.music_file = 'VCR.mp3'
-            change_music(self.username, 0)
+            change_music(self.username, 0)# Set default music file
             self.control_mode = 'Keyboard'
-            change_cmode(self.username, 0)
+            change_cmode(self.username, 0) # Set default control mode
 
-
-        self.build_menu()
+        self.build_menu()# Build the settings menu
 
     def build_menu(self):
         # Add background image
         background = cocos.sprite.Sprite('background.jpg')
         background.position = (director.window.width // 2, director.window.height // 2)
-        background.opacity = 50  # 设置背景图片的透明度为 200
+        background.opacity = 50  # Set background transparency
         self.add(background, z=0)
 
         # Add settings page title
@@ -1477,7 +1475,7 @@ class Settings(Scene):
                             anchor_x='center', anchor_y='center')
         self.add(title_label, z=1)
 
-        # button section
+        # Section for settings adjustment buttons
         increase_effect_volume_item = MenuItem("+", self.on_increase_effect_volume)
         decrease_effect_volume_item = MenuItem("-", self.on_decrease_effect_volume)
         increase_music_volume_item = MenuItem("+", self.on_increase_music_volume)
@@ -1503,7 +1501,7 @@ class Settings(Scene):
                               selected_effect=zoom_in(), unselected_effect=zoom_out())
         self.add(self.menu, z=2)
 
-        # General Display Label Section
+        # Display labels for current volume and mode settings
         self.effect_volume_label = Label('Effect Volume:{:.1f}'.format(self.effect_volume),
                                          position=(director.window.width * 0.2, director.window.height * 0.6),
                                          font_size=32,
@@ -1600,9 +1598,7 @@ class Settings(Scene):
         director.replace(homepage_scene)
         
 
-# program start ! ! !
-
-
+# Main execution point, initialize the director and start the game
 if __name__ == "__main__":
     cocos.director.director.init(width=2560, height=1600, caption="原神.exe", fullscreen=True)  # if you wanna chage the size of the window , adjust the width and height here as you like!
     cocos.director.director.run(GameStartScene())
