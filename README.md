@@ -1,4 +1,4 @@
-**Note: The final version of the game is in the gluttonous folder of main branch**
+**Note: The final version of the game is in the "test" folder of main branch**
 
 
 
